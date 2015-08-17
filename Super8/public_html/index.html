@@ -113,19 +113,19 @@
                     //camera.position.y -= 0.1;
                 }
                 
-                // Y-Key – Down
-                else if (event.charCode === 97){
-                    camera.position.x -= pos;
+                // S-Key – Down
+                else if (event.charCode === 115){
+                    camera.position.z += pos;
                 }
                
                 // A-Key – Left
-                else if (event.charCode === 115){
-                    camera.position.x += pos;
+                else if (event.charCode === 97){
+                    camera.position.x -= pos;
                 }
                 
-                // S-Key – Right
-                else if(event.charCode === 121){
-                    camera.position.z += pos;
+                // D-Key – Right
+                else if(event.charCode === 100){
+                    camera.position.x += pos;
                 }
                 
                 
@@ -133,6 +133,9 @@
                 // Arrow up - Rotate up
                 else if (event.keyCode === 38){ 
                     camera.rotation.x += rot; 
+                    if(e.which <= 60 && e.which >= -60){
+                        return true;
+                    }
                 } 
                 
                 // Arrow down - Rotate down
