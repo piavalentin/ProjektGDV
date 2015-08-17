@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Super8</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <style>
+            canvas{
+                width: 100%;
+                height: 100%;
+            }
+            
+            body{
+                margin: 0px;
+                overflow: hidden;
+            }
+        </style>
+        
+    </head>
+    <body>
+        
+        <script src="three.min.js"></script>
+        <script src="controls.js"></script>
+        <script>
+            //SCENE
+            var scene = new THREE.Scene();
+            
+            
+            //CAMERA
+            var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000); //Perspective(field of view, aspect ratio, near, far)
+            camera.position.z = 10;
+
+
+            //CONTROLS
+            controls = new THREE.OrbitControls(camera);
+
+
+            //LIGHTS
+                //DIRECTIONAL LIGHT
+                var directionalLight = new THREE.DirectionalLight("white");
+                directionalLight.position.set(20,20,20);
+                directionalLight.target.position.set(0,0,0);
+                directionalLight.castShadow = true;
+                directionalLight.shadowDarkness = 0.5;
+
+                directionalLight.shadowCameraNear = 0;
+                directionalLight.shadowCameraFar = 50;
+
+                directionalLight.shadowCameraLeft = -30;
+                directionalLight.shadowCameraRight = 30;
+                directionalLight.shadowCameraTop = 30;
+                directionalLight.shadowCameraBottom = -30;
+
+                directionalLight.shadowCameraVisible = true;
+                
+                directionalLight.shadowMapWidth = 2048;
+                directionalLight.shadowMapHeight = 2048;
+                scene.add(directionalLight);
+
+                //HEMISPHERE LIGHT
+                var hemiLight = new THREE.HemisphereLight(0xffffff, 0.1);
+                hemiLight.position.y = 20;
+                scene.add(hemiLight);
+
+
+            //RENDERER
+            var renderer = new THREE.WebGLRenderer({antialias: true});
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMapEnabled = true;
+            renderer.shadowMapSoft = true;
+            renderer.shadowMapType = THREE.PCFSoftShadowMap;
+            document.body.appendChild(renderer.domElement);
+
+
+            //GEOMETRY
+                //SKYBOX
+                var imagePrefix = "textures/skybox/";
+                var directions  = ["xpos", "xneg", "ypos", "yneg", "zpos", "zneg"];
+                var imageSuffix = ".jpg";
+
+                var materialArray = [];
+                for (var i = 0; i < 6; i++){
+                    materialArray.push( new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture( imagePrefix + directions[0] + imageSuffix ), side: THREE.BackSide}));
+                }
+                var skyGeometry = new THREE.CubeGeometry(100,50,100);
+                var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
+                var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
+                scene.add(skyBox);                
+            
+                //HOUSE
+                var box_geometry = new THREE.CubeGeometry(9,2.5,5);
+                var box_material = new THREE.MeshPhongMaterial({color: "grey"});            
+                var box = new THREE.Mesh(box_geometry, box_material);
+                box.position.y = + 0.5;
+                box.castShadow = true;
+                scene.add(box);
+
+
+                //GROUND
+                var plane_geometry = new THREE.PlaneGeometry(50,50);
+                var plane_material = new THREE.MeshPhongMaterial({color: "green"});            
+                var plane = new THREE.Mesh(plane_geometry, plane_material);
+                plane.position.y = -0.5;
+                plane.rotateX(-Math.PI/2);
+                plane.receiveShadow = true;
+                scene.add(plane);
+            
+            //FUNCTION
+            function render(){            
+                renderer.render(scene,camera);
+                requestAnimationFrame(render);
+            }
+            render();
+        </script>
+        
+    </body>
+</html>
