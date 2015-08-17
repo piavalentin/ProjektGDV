@@ -21,7 +21,7 @@
     <body>
         
         <script src="three.min.js"></script>
-        <script src="controls.js"></script>
+        <!--<script src="controls.js"></script>-->
         <script>
             //SCENE
             var scene = new THREE.Scene();
@@ -33,7 +33,7 @@
 
 
             //CONTROLS
-            controls = new THREE.OrbitControls(camera);
+            //controls = new THREE.OrbitControls(camera);
 
 
             //LIGHTS
@@ -110,8 +110,11 @@
             function render(){            
                 renderer.render(scene,camera);
                 requestAnimationFrame(render);
+                
+                // Controls
+                document.addEventListener( 'keypress', checkKeys, false );
             }
-<<<<<<< HEAD
+
             
             
             // CONTROLS
@@ -150,10 +153,7 @@
                 // Rotation
                 // Arrow up - Rotate up
                 else if (event.keyCode === 38){ 
-                    camera.rotation.x += rot; 
-                    if(e.which <= 60 && e.which >= -60){
-                        return true;
-                    }
+                    camera.rotation.x += rot;
                 } 
                 
                 // Arrow down - Rotate down
@@ -172,12 +172,6 @@
                 }
 
             }
-
-
-
-
-=======
->>>>>>> origin/master
             render();
         </script>
         
