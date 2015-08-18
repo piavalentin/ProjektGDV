@@ -22,16 +22,20 @@
         
         <script src="three.min.js"></script>
         <script src="PointerLockControls.js"></script>
+        <script src="controls.js"></script>
         <script>
             //SCENE
             var scene = new THREE.Scene();
-            
+            //scene.fog = new THREE.Fog(0xffffff, 0, 25);
             
             //CAMERA
             var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000); //Perspective(field of view, aspect ratio, near, far)
             camera.position.z = 20;
-            camera.position.y = 0.1;
+            camera.position.y = 0.5;
             camera.position.x = 1;
+            
+            //CONTROLS
+            controls = new THREE.OrbitControls(camera);
             
             //LIGHTS
                 //DIRECTIONAL LIGHT
@@ -87,22 +91,118 @@
                 scene.add(skyBox);                
             
                 //HOUSE
-                var house_geometry = new THREE.CubeGeometry(9,2.5,5);
+                var house_geometry = new THREE.CubeGeometry(10,2.5,5);
                 var house_material = new THREE.MeshPhongMaterial({color: "grey"});            
                 var house = new THREE.Mesh(house_geometry, house_material);
-                house.position.y = + 0.5;
+                house.position.y = + 1.25;
                 house.castShadow = true;
                 scene.add(house);
 
 
                 //GROUND
-                var plane_geometry = new THREE.PlaneGeometry(50,50);
-                var plane_material = new THREE.MeshPhongMaterial({color: "green"});            
-                var plane = new THREE.Mesh(plane_geometry, plane_material);
-                plane.position.y = -0.5;
-                plane.rotateX(-Math.PI/2);
-                plane.receiveShadow = true;
-                scene.add(plane);
+                    //GRASS
+                    var grass_geometry = new THREE.PlaneGeometry(12.5, 12.5);
+                    var grass_material = new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture("textures/ground/grass.jpg")});
+                
+                    //BLOCK A
+                    var grass_01 = new THREE.Mesh(grass_geometry, grass_material);
+                    grass_01.position.set(-18.75, 0, -18.75);
+                    grass_01.rotateX(-Math.PI/2);
+                    grass_01.receiveShadow = true;
+                    scene.add(grass_01);
+                    
+                    var grass_02 = new THREE.Mesh(grass_geometry, grass_material);
+                    grass_02.position.set(-6.25, 0, -18.75);
+                    grass_02.rotateX(-Math.PI/2);
+                    grass_02.receiveShadow = true;
+                    scene.add(grass_02);
+                    
+                    var grass_03 = new THREE.Mesh(grass_geometry, grass_material);
+                    grass_03.position.set(-18.75, 0, -6.25);
+                    grass_03.rotateX(-Math.PI/2);
+                    grass_03.receiveShadow = true;
+                    scene.add(grass_03);
+                    
+                    var grass_04 = new THREE.Mesh(grass_geometry, grass_material);
+                    grass_04.position.set(-6.25, 0, -6.25);
+                    grass_04.rotateX(-Math.PI/2);
+                    grass_04.receiveShadow = true;
+                    scene.add(grass_04);
+                    
+                    //BLOCK B
+                    var grass_05 = new THREE.Mesh(grass_geometry, grass_material);
+                    grass_05.position.set(6.25, 0, -18.75);
+                    grass_05.rotateX(-Math.PI/2);
+                    grass_05.receiveShadow = true;
+                    scene.add(grass_05);
+                    
+                    var grass_06 = new THREE.Mesh(grass_geometry, grass_material);
+                    grass_06.position.set(18.75, 0, -18.75);
+                    grass_06.rotateX(-Math.PI/2);
+                    grass_06.receiveShadow = true;
+                    scene.add(grass_06);
+                    
+                    var grass_07 = new THREE.Mesh(grass_geometry, grass_material);
+                    grass_07.position.set(6.25, 0, -6.25);
+                    grass_07.rotateX(-Math.PI/2);
+                    grass_07.receiveShadow = true;
+                    scene.add(grass_07);
+                    
+                    var grass_08 = new THREE.Mesh(grass_geometry, grass_material);
+                    grass_08.position.set(18.75, 0, -6.25);
+                    grass_08.rotateX(-Math.PI/2);
+                    grass_08.receiveShadow = true;
+                    scene.add(grass_08);
+                    
+                    //BLOCK C
+                    var grass_09 = new THREE.Mesh(grass_geometry, grass_material);
+                    grass_09.position.set(-18.75, 0, 6.25);
+                    grass_09.rotateX(-Math.PI/2);
+                    grass_09.receiveShadow = true;
+                    scene.add(grass_09);
+                    
+                    var grass_10 = new THREE.Mesh(grass_geometry, grass_material);
+                    grass_10.position.set(-6.25, 0, 6.25);
+                    grass_10.rotateX(-Math.PI/2);
+                    grass_10.receiveShadow = true;
+                    scene.add(grass_10);
+                    
+                    var grass_11 = new THREE.Mesh(grass_geometry, grass_material);
+                    grass_11.position.set(-18.75, 0, 18.75);
+                    grass_11.rotateX(-Math.PI/2);
+                    grass_11.receiveShadow = true;
+                    scene.add(grass_11);
+                    
+                    var grass_12 = new THREE.Mesh(grass_geometry, grass_material);
+                    grass_12.position.set(-6.25, 0, 18.75);
+                    grass_12.rotateX(-Math.PI/2);
+                    grass_12.receiveShadow = true;
+                    scene.add(grass_12);
+                    
+                    //BLOCK D
+                    var grass_13 = new THREE.Mesh(grass_geometry, grass_material);
+                    grass_13.position.set(6.25, 0, 6.25);
+                    grass_13.rotateX(-Math.PI/2);
+                    grass_13.receiveShadow = true;
+                    scene.add(grass_13);
+                    
+                    var grass_14 = new THREE.Mesh(grass_geometry, grass_material);
+                    grass_14.position.set(18.75, 0, 6.25);
+                    grass_14.rotateX(-Math.PI/2);
+                    grass_14.receiveShadow = true;
+                    scene.add(grass_14);
+                    
+                    var grass_15 = new THREE.Mesh(grass_geometry, grass_material);
+                    grass_15.position.set(6.25, 0, 18.75);
+                    grass_15.rotateX(-Math.PI/2);
+                    grass_15.receiveShadow = true;
+                    scene.add(grass_15);
+                    
+                    var grass_16 = new THREE.Mesh(grass_geometry, grass_material);
+                    grass_16.position.set(18.75, 0, 18.75);
+                    grass_16.rotateX(-Math.PI/2);
+                    grass_16.receiveShadow = true;
+                    scene.add(grass_16);
             
             //FUNCTION
             function render(){            
@@ -110,7 +210,7 @@
                 requestAnimationFrame(render);
     
                 // Controls
-                document.addEventListener('keypress', checkKeys, false );
+                //document.addEventListener('keypress', checkKeys, false );
               
             }
 
