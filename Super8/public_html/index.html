@@ -21,11 +21,7 @@
     <body>
         
         <script src="three.min.js"></script>
-<<<<<<< HEAD
         <script src="PointerLockControls.js"></script>
-=======
-        <script src="controls.js"></script>
->>>>>>> origin/master
         <script>
             //SCENE
             var scene = new THREE.Scene();
@@ -111,18 +107,12 @@
             function render(){            
                 renderer.render(scene,camera);
                 requestAnimationFrame(render);
-                
-<<<<<<< HEAD
+    
                 // Controls
                  document.addEventListener('keypress', checkKeys, false );
-=======
-                //CONTROLS
-                document.addEventListener( 'keypress', checkKeys, false );
->>>>>>> origin/master
             }
 
-            
-//            
+                     
             // CONTROLS
             function checkKeys(event){
             // Key-Numbers: http://help.adobe.com/en_US/AS2LCR/Flash_10.0/help.html?content=00000520.html
