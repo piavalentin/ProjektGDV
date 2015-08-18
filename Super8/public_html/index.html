@@ -21,7 +21,11 @@
     <body>
         
         <script src="three.min.js"></script>
+<<<<<<< HEAD
         <script src="PointerLockControls.js"></script>
+=======
+        <script src="controls.js"></script>
+>>>>>>> origin/master
         <script>
             //SCENE
             var scene = new THREE.Scene();
@@ -86,12 +90,12 @@
                 scene.add(skyBox);                
             
                 //HOUSE
-                var box_geometry = new THREE.CubeGeometry(9,2.5,5);
-                var box_material = new THREE.MeshPhongMaterial({color: "grey"});            
-                var box = new THREE.Mesh(box_geometry, box_material);
-                box.position.y = + 0.5;
-                box.castShadow = true;
-                scene.add(box);
+                var house_geometry = new THREE.CubeGeometry(9,2.5,5);
+                var house_material = new THREE.MeshPhongMaterial({color: "grey"});            
+                var house = new THREE.Mesh(house_geometry, house_material);
+                house.position.y = + 0.5;
+                house.castShadow = true;
+                scene.add(house);
 
 
                 //GROUND
@@ -108,8 +112,13 @@
                 renderer.render(scene,camera);
                 requestAnimationFrame(render);
                 
+<<<<<<< HEAD
                 // Controls
                  document.addEventListener('keypress', checkKeys, false );
+=======
+                //CONTROLS
+                document.addEventListener( 'keypress', checkKeys, false );
+>>>>>>> origin/master
             }
 
             
