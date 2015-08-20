@@ -97,39 +97,49 @@
                 house.reveiveShadow = true;
                 scene.add(house);
                 
-                //SIDES
-                var roof_side_geometry = new THREE.Geometry();
-                roof_side_geometry.vertices.push(new THREE.Vector3(-5, 4, 0));
-                roof_side_geometry.vertices.push(new THREE.Vector3(-5, 2.5, -4));
-                roof_side_geometry.vertices.push(new THREE.Vector3(-5, 2.5, 4));
+                    //SIDES
+                    var roof_side_geometry = new THREE.Geometry();
+                    roof_side_geometry.vertices.push(new THREE.Vector3(-5, 4, 0));
+                    roof_side_geometry.vertices.push(new THREE.Vector3(-5, 2.5, -4));
+                    roof_side_geometry.vertices.push(new THREE.Vector3(-5, 2.5, 4));
 
-                var uvs = [];
-                uvs.push(new THREE.Vector2(0.5, 1));
-                uvs.push(new THREE.Vector2(0, 0));
-                uvs.push(new THREE.Vector2(1, 0));
+                    var uvs = [];
+                    uvs.push(new THREE.Vector2(0.5, 1));
+                    uvs.push(new THREE.Vector2(0, 0));
+                    uvs.push(new THREE.Vector2(1, 0));
 
-                roof_side_geometry.faces.push(new THREE.Face3(0,1,2));
-                roof_side_geometry.faceVertexUvs[0].push([uvs[0], uvs[1], uvs[2]]);
-                var roof_side_material = new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture("textures/house/wood.jpg"), bumpMap: THREE.ImageUtils.loadTexture("textures/house/wood_DISP.png"), bumpScale: 0.1, side: THREE.DoubleSide});
-                var side_left = new THREE.Mesh(roof_side_geometry, roof_side_material);
-                side_left.receiveShadow.true;
-                side_left.castShadow = true;
-                scene.add(side_left);
-                
-                var side_right = side_left.clone();
-                side_right.position.x = 10;
-                side_right.castShadow = true;
-                side_right.receiveShadow = true;
-                scene.add(side_right);
-                
-                var roof_top_geometry = new THREE.PlaneGeometry(11, 4.5);
-                var roof_top_material = new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture("textures/house/roof.jpg"), bumpMap: THREE.ImageUtils.loadTexture("textures/house/roof_DISP.jpg"), bumpScale: 0.1, side: THREE.DoubleSide});
-                var roof_top = new THREE.Mesh(roof_top_geometry, roof_top_material);
-                roof_top.rotateX(-1.22);
-                roof_top.position.set(0, 3.27, 2);
-                roof_top.castShadow = true;
-                roof_top.receiveShadow = true;
-                scene.add(roof_top);
+                    roof_side_geometry.faces.push(new THREE.Face3(0,1,2));
+                    roof_side_geometry.computeFaceNormals();
+                    roof_side_geometry.faceVertexUvs[0].push([uvs[0], uvs[1], uvs[2]]);
+                    var roof_side_material = new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture("textures/house/wood.jpg"), bumpMap: THREE.ImageUtils.loadTexture("textures/house/wood_DISP.jpg"), bumpScale: 0.1, side: THREE.DoubleSide});
+                    var side_left = new THREE.Mesh(roof_side_geometry, roof_side_material);
+                    side_left.receiveShadow.true;
+                    side_left.castShadow = true;
+                    scene.add(side_left);
+
+                    var side_right = side_left.clone();
+                    side_right.position.x = 10;
+                    side_right.castShadow = true;
+                    side_right.receiveShadow = true;
+                    scene.add(side_right);
+
+                    //TOP
+                    var roof_top_geometry = new THREE.PlaneGeometry(11, 4.5);
+                    var roof_top_material = new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture("textures/house/roof.jpg"), bumpMap: THREE.ImageUtils.loadTexture("textures/house/roof_DISP.jpg"), bumpScale: 0.1, specularMap: THREE.ImageUtils.loadTexture("textures/house/roof_SPEC.jpg"), specular: new THREE.Color("grey"), side: THREE.DoubleSide});
+                    var roof_top_front = new THREE.Mesh(roof_top_geometry, roof_top_material);
+                    roof_top_front.rotateX(-1.21);
+                    roof_top_front.position.set(0, 3.26, 2.1);
+                    roof_top_front.castShadow = true;
+                    roof_top_front.receiveShadow = true;
+                    scene.add(roof_top_front);
+
+                    var roof_top_back = new THREE.Mesh(roof_top_geometry, roof_top_material);
+                    roof_top_back.rotateY(-Math.PI);
+                    roof_top_back.rotateX(-1.21);
+                    roof_top_back.position.set(0, 3.26, -2.1);
+                    roof_top_back.castShadow = true;
+                    roof_top_back.receiveShadow = true;
+                    scene.add(roof_top_back);
 
 
                 //GROUND
