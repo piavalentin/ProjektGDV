@@ -44,7 +44,7 @@
                 directionalLight.shadowDarkness = 0.5;
 
                 directionalLight.shadowCameraNear = 0;
-                directionalLight.shadowCameraFar = 50;
+                directionalLight.shadowCameraFar = 100;
 
                 directionalLight.shadowCameraLeft = -30;
                 directionalLight.shadowCameraRight = 30;
@@ -58,8 +58,8 @@
                 scene.add(directionalLight);
 
                 //HEMISPHERE LIGHT
-                var hemiLight = new THREE.HemisphereLight(0xffffff, 0.01);
-                hemiLight.position.y = 20;
+                var hemiLight = new THREE.HemisphereLight("white", 0.01);
+                hemiLight.position.y = 1;
                 //scene.add(hemiLight);
 
 
@@ -78,129 +78,79 @@
                 var directions  = ["xpos", "xneg", "ypos", "yneg", "zpos", "zneg"];
                 var imageSuffix = ".jpg";
 
-                var materialArray = [];
+                var skybox_array = [];
                 for (var i = 0; i < 6; i++){
-                    materialArray.push( new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture( imagePrefix + directions[i] + imageSuffix ), side: THREE.BackSide}));
+                    skybox_array.push(new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture( imagePrefix + directions[i] + imageSuffix ), side: THREE.BackSide}));
                 }
-                var skyGeometry = new THREE.CubeGeometry(100,50,100);
-                var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
-                var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
-                skyBox.position.y = 24;
-                scene.add(skyBox);                
+                var skybox_geometry = new THREE.CubeGeometry(100,50,100);
+                var skybox_material = new THREE.MeshFaceMaterial(skybox_array);
+                var skybox = new THREE.Mesh(skybox_geometry, skybox_material);
+                skybox.position.y = 24;
+                scene.add(skybox);                
             
                 //HOUSE
-                var house_geometry = new THREE.CubeGeometry(10,2.49,8);
+                var house_geometry = new THREE.CubeGeometry(10, 2.5, 8);
                 var house_material = new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture("textures/house/wood.jpg"), bumpMap: THREE.ImageUtils.loadTexture("textures/house/wood_DISP.jpg"), bumpScale: 0.1, side: THREE.DoubleSide});                
                 var house = new THREE.Mesh(house_geometry, house_material);
-                house.position.y = + 1.25;
+                house.position.y = + 1.26;
                 house.castShadow = true;
+                house.reveiveShadow = true;
                 scene.add(house);
+                
+                //SIDES
+                var roof_side_geometry = new THREE.Geometry();
+                roof_side_geometry.vertices.push(new THREE.Vector3(-5, 4, 0));
+                roof_side_geometry.vertices.push(new THREE.Vector3(-5, 2.5, -4));
+                roof_side_geometry.vertices.push(new THREE.Vector3(-5, 2.5, 4));
+
+                var uvs = [];
+                uvs.push(new THREE.Vector2(0.5, 1));
+                uvs.push(new THREE.Vector2(0, 0));
+                uvs.push(new THREE.Vector2(1, 0));
+
+                roof_side_geometry.faces.push(new THREE.Face3(0,1,2));
+                roof_side_geometry.faceVertexUvs[0].push([uvs[0], uvs[1], uvs[2]]);
+                var roof_side_material = new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture("textures/house/wood.jpg"), bumpMap: THREE.ImageUtils.loadTexture("textures/house/wood_DISP.png"), bumpScale: 0.1, side: THREE.DoubleSide});
+                var side_left = new THREE.Mesh(roof_side_geometry, roof_side_material);
+                side_left.receiveShadow.true;
+                side_left.castShadow = true;
+                scene.add(side_left);
+                
+                var side_right = side_left.clone();
+                side_right.position.x = 10;
+                side_right.castShadow = true;
+                side_right.receiveShadow = true;
+                scene.add(side_right);
+                
+                var roof_top_geometry = new THREE.PlaneGeometry(11, 4.5);
+                var roof_top_material = new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture("textures/house/roof.jpg"), bumpMap: THREE.ImageUtils.loadTexture("textures/house/roof_DISP.jpg"), bumpScale: 0.1, side: THREE.DoubleSide});
+                var roof_top = new THREE.Mesh(roof_top_geometry, roof_top_material);
+                roof_top.rotateX(-1.22);
+                roof_top.position.set(0, 3.27, 2);
+                roof_top.castShadow = true;
+                roof_top.receiveShadow = true;
+                scene.add(roof_top);
 
 
                 //GROUND
                     //GRASS
-                    var grass_geometry = new THREE.PlaneGeometry(12.5, 12.5);
-                    var grass_material = new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture("textures/ground/grass.jpg"), bumpMap: THREE.ImageUtils.loadTexture("textures/ground/grass_DISP.jpg"), bumpScale: 0.1});
-                
-                    //BLOCK A
-                    var grass_01 = new THREE.Mesh(grass_geometry, grass_material);
-                    grass_01.position.set(-18.75, 0, -18.75);
-                    grass_01.rotateX(-Math.PI/2);
-                    grass_01.receiveShadow = true;
-                    scene.add(grass_01);
-                    
-                    var grass_02 = new THREE.Mesh(grass_geometry, grass_material);
-                    grass_02.position.set(-6.25, 0, -18.75);
-                    grass_02.rotateX(-Math.PI/2);
-                    grass_02.receiveShadow = true;
-                    scene.add(grass_02);
-                    
-                    var grass_03 = new THREE.Mesh(grass_geometry, grass_material);
-                    grass_03.position.set(-18.75, 0, -6.25);
-                    grass_03.rotateX(-Math.PI/2);
-                    grass_03.receiveShadow = true;
-                    scene.add(grass_03);
-                    
-                    var grass_04 = new THREE.Mesh(grass_geometry, grass_material);
-                    grass_04.position.set(-6.25, 0, -6.25);
-                    grass_04.rotateX(-Math.PI/2);
-                    grass_04.receiveShadow = true;
-                    scene.add(grass_04);
-                    
-                    //BLOCK B
-                    var grass_05 = new THREE.Mesh(grass_geometry, grass_material);
-                    grass_05.position.set(6.25, 0, -18.75);
-                    grass_05.rotateX(-Math.PI/2);
-                    grass_05.receiveShadow = true;
-                    scene.add(grass_05);
-                    
-                    var grass_06 = new THREE.Mesh(grass_geometry, grass_material);
-                    grass_06.position.set(18.75, 0, -18.75);
-                    grass_06.rotateX(-Math.PI/2);
-                    grass_06.receiveShadow = true;
-                    scene.add(grass_06);
-                    
-                    var grass_07 = new THREE.Mesh(grass_geometry, grass_material);
-                    grass_07.position.set(6.25, 0, -6.25);
-                    grass_07.rotateX(-Math.PI/2);
-                    grass_07.receiveShadow = true;
-                    scene.add(grass_07);
-                    
-                    var grass_08 = new THREE.Mesh(grass_geometry, grass_material);
-                    grass_08.position.set(18.75, 0, -6.25);
-                    grass_08.rotateX(-Math.PI/2);
-                    grass_08.receiveShadow = true;
-                    scene.add(grass_08);
-                    
-                    //BLOCK C
-                    var grass_09 = new THREE.Mesh(grass_geometry, grass_material);
-                    grass_09.position.set(-18.75, 0, 6.25);
-                    grass_09.rotateX(-Math.PI/2);
-                    grass_09.receiveShadow = true;
-                    scene.add(grass_09);
-                    
-                    var grass_10 = new THREE.Mesh(grass_geometry, grass_material);
-                    grass_10.position.set(-6.25, 0, 6.25);
-                    grass_10.rotateX(-Math.PI/2);
-                    grass_10.receiveShadow = true;
-                    scene.add(grass_10);
-                    
-                    var grass_11 = new THREE.Mesh(grass_geometry, grass_material);
-                    grass_11.position.set(-18.75, 0, 18.75);
-                    grass_11.rotateX(-Math.PI/2);
-                    grass_11.receiveShadow = true;
-                    scene.add(grass_11);
-                    
-                    var grass_12 = new THREE.Mesh(grass_geometry, grass_material);
-                    grass_12.position.set(-6.25, 0, 18.75);
-                    grass_12.rotateX(-Math.PI/2);
-                    grass_12.receiveShadow = true;
-                    scene.add(grass_12);
-                    
-                    //BLOCK D
-                    var grass_13 = new THREE.Mesh(grass_geometry, grass_material);
-                    grass_13.position.set(6.25, 0, 6.25);
-                    grass_13.rotateX(-Math.PI/2);
-                    grass_13.receiveShadow = true;
-                    scene.add(grass_13);
-                    
-                    var grass_14 = new THREE.Mesh(grass_geometry, grass_material);
-                    grass_14.position.set(18.75, 0, 6.25);
-                    grass_14.rotateX(-Math.PI/2);
-                    grass_14.receiveShadow = true;
-                    scene.add(grass_14);
-                    
-                    var grass_15 = new THREE.Mesh(grass_geometry, grass_material);
-                    grass_15.position.set(6.25, 0, 18.75);
-                    grass_15.rotateX(-Math.PI/2);
-                    grass_15.receiveShadow = true;
-                    scene.add(grass_15);
-                    
-                    var grass_16 = new THREE.Mesh(grass_geometry, grass_material);
-                    grass_16.position.set(18.75, 0, 18.75);
-                    grass_16.rotateX(-Math.PI/2);
-                    grass_16.receiveShadow = true;
-                    scene.add(grass_16);
+                    var grass_geometry = new THREE.PlaneGeometry(5, 5);
+                    var grass_material = new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture("textures/ground/grass.jpg"), bumpMap: THREE.ImageUtils.loadTexture("textures/ground/grass_DISP.jpg"), bumpScale: 0.1});                                                        
+                    var grass_array = [];
+                    var x = -25;
+                    var z = -25;
+                    for(var i = 0; i < 144; i++){
+                        grass_array.push(new THREE.Mesh(grass_geometry, grass_material));
+                        grass_array[i].position.set(x, 0, z);
+                        grass_array[i].rotateX(-Math.PI/2);
+                        grass_array[i].receiveShadow = true;
+                        scene.add(grass_array[i]);
+                        x += 5;
+                        if(x > 25){
+                            x = -25;
+                            z += 5;
+                        }
+                    }
                     
                     //TEST TREES
                     var test = new THREE.Mesh(new THREE.PlaneGeometry(3,4), new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture("textures/ground/tree.png"), transparent: true, side: THREE.DoubleSide}));
@@ -208,6 +158,8 @@
                     test.position.set(5, 2, 10);
                     test2.position.set(5, 2, 10);
                     test2.rotateY(-Math.PI/2);
+                    test.castShadow = true;
+                    test2.castShadow = true;
                     scene.add(test);
                     scene.add(test2);
                     
@@ -216,7 +168,8 @@
             function render(){            
                 renderer.render(scene,camera);
                 requestAnimationFrame(render);
-    
+                
+                
                 // Controls
                 //document.addEventListener('keypress', checkKeys, false );
               

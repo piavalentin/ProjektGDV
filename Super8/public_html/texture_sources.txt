@@ -1,0 +1,14 @@
+Sources
+_______
+
+grass:
+http://mayang.com/textures/Nature/images/Soil%20and%20Earth/bare_earth_dry_grass_6222769.JPG
+
+wood:
+http://pre08.deviantart.net/293d/th/pre/f/2010/100/e/d/natural_wood_texture_by_shawnaize.jpg
+
+skybox:
+http://forums.tf2maps.net/geek/gars/images/3/8/5/1/sky_option5a.png
+
+roof:
+http://louieand.co/wp-content/uploads/2015/06/bathroom-shingle-roof-texture-with-roof-shingles-texture-seamless.jpg
