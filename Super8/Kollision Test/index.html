@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>collision test</title>
+		<style>
+			body { margin: 0; }
+			canvas { width: 100%; height: 100% }
+		</style>
+	</head>
+	<body>
+		<script src="three.min.js"></script>
+		<script>
+			var scene = new THREE.Scene();
+			var camera = new THREE.PerspectiveCamera( 60, window.innerWidth/window.innerHeight, 0.1, 1000 );
+
+			var renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+			var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+			var material = new THREE.MeshPhongMaterial( { color: "green" } );
+			var cube = new THREE.Mesh( geometry, material );
+			scene.add( cube );
+			
+			geometry = new THREE.BoxGeometry( 1, 2, 3);
+			material = new THREE.MeshPhongMaterial( { color : "red" } );
+			var wall1 = new THREE.Mesh( geometry, material );
+			var wall2 = new THREE.Mesh( geometry, material );
+			scene.add( wall1 );
+			scene.add( wall2 );
+			
+			wall1.position.x = -3;
+			
+			wall2.position.x = 3;
+
+			camera.position.y = 10;
+			camera.rotation.x = -1.5707;
+			
+			//Light
+			var directionalLight = new THREE.DirectionalLight( {color: "white"}, 1 );
+			directionalLight.position.set( -1, 1, -1 );
+			scene.add( directionalLight );
+			
+			var light = new THREE.AmbientLight( 0x404040 ); // soft white light
+			scene.add( light );
+			
+			//Render
+			var render = function () {
+				requestAnimationFrame( render );
+				update();
+				renderer.render(scene, camera);
+			};
+			
+			//Controls
+			var keys = new Array( 128 );
+			var k_w = false;
+			var k_a = false;
+			var k_s = false;
+			var k_d = false;
+			for (var i = 0; i < keys.length; i++) {
+				keys[i] = false;
+			}
+			window.addEventListener('keydown', keyPressed, false);
+			window.addEventListener('keyup', keyReleased, false);
+
+			function keyPressed( event ){
+				
+				keys[event.keyCode] = true;
+			}
+
+			function keyReleased( event ){
+				
+				keys[event.keyCode] = false;
+			}
+			
+			//Logic
+			var move = 0.1;
+			
+			var walls = [];
+			walls.push(wall1);
+			walls.push(wall2);
+			
+			
+			
+			var update = function () {
+				k_w = keys[87];
+				k_a = keys[65];
+				k_s = keys[83];
+				k_d = keys[68];
+				
+				var rayUp = new THREE.Raycaster(cube.position, new THREE.Vector3(0, 0, -1), 0.4, 0.6);
+				var rayDown = new THREE.Raycaster(cube.position, new THREE.Vector3(0, 0, 1), 0.4, 0.6);
+				var rayLeft = new THREE.Raycaster(cube.position, new THREE.Vector3(-1, 0, 0), 0.4, 0.6);
+				var rayRight = new THREE.Raycaster(cube.position, new THREE.Vector3(1, 0, 0), 0.4, 0.6);
+				
+				if (k_w) {
+					if (checkCollision(rayUp)) {
+						move = 0;
+					}
+					else {
+						move = 0.1;
+					}
+					cube.position.z -= move;
+					camera.position.z -= move;
+				}
+				if (k_a) {
+					if (checkCollision(rayLeft)) {
+						move = 0;
+					}
+					else {
+						move = 0.1;
+					}
+					cube.position.x -= move;
+					camera.position.x -= move;
+				}
+				if (k_s) {
+					if (checkCollision(rayDown)) {
+						move = 0;
+					}
+					else {
+						move = 0.1;
+					}
+					cube.position.z += move;
+					camera.position.z += move;
+				}
+				if (k_d) {
+					if (checkCollision(rayRight)) {
+						move = 0;
+					}
+					else {
+						move = 0.1;
+					}
+					cube.position.x += move;
+					camera.position.x += move;
+				}
+			}
+			
+			//Collision
+			function checkCollision(rayDir) {
+				var collide = rayDir.intersectObjects(walls);
+				if ( collide.length > 0 ) {
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+			
+			render();
+		</script>
+	</body>
+</html>
