@@ -12,3 +12,6 @@ http://forums.tf2maps.net/geek/gars/images/3/8/5/1/sky_option5a.png
 
 roof:
 http://louieand.co/wp-content/uploads/2015/06/bathroom-shingle-roof-texture-with-roof-shingles-texture-seamless.jpg
+
+bark:
+http://www.google.de/imgres?imgurl=http%3A%2F%2Fwww.publicdomainpictures.net%2Fdownload-picture.php%253Fadresar%253D60000%2526soubor%253Dbark-texture.jpg&imgrefurl=http%3A%2F%2Fwww.publicdomainpictures.net%2Fview-image.php%3Fimage%3D59087%26picture%3Dbark-texture&h=1440&w=1920&tbnid=visPTN16vSjQNM%3A&docid=HFUhs9_hD1_sWM&ei=RV7YVYDJGon8UPn7iuAM&tbm=isch&iact=rc&uact=3&dur=3559&page=1&start=0&ndsp=34&ved=0CDUQrQMwB2oVChMIwP_bo8y8xwIVCT4UCh35vQLM

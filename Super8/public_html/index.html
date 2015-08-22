@@ -162,16 +162,15 @@
                         }
                     }
                     
-                    //TEST TREES
-                    var test = new THREE.Mesh(new THREE.PlaneGeometry(3,4), new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture("textures/ground/tree.png"), transparent: true, side: THREE.DoubleSide}));
-                    var test2 = new THREE.Mesh(new THREE.PlaneGeometry(3,4), new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture("textures/ground/tree.png"), transparent: true, side: THREE.DoubleSide}));
-                    test.position.set(5, 2, 10);
-                    test2.position.set(5, 2, 10);
-                    test2.rotateY(-Math.PI/2);
-                    test.castShadow = true;
-                    test2.castShadow = true;
-                    scene.add(test);
-                    scene.add(test2);
+                    //TEST TREES                    
+                    var loader = new THREE.JSONLoader();
+                    loader.load("models/tree.json", function(geometry){
+                        var material = new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture("textures/ground/bark.jpg"), bumpMap: THREE.ImageUtils.loadTexture("textures/ground/bark_DISP.jpg"), bumpScale: 0.1});
+                        var mesh = new THREE.Mesh(geometry, material);
+                        mesh.position.set(0, 0, 10);
+                        mesh.castShadow = true;
+                        scene.add(mesh);
+                    });
                     
             
             //FUNCTION
