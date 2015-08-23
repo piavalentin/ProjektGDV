@@ -34,48 +34,6 @@
             
             //CONTROLS
             controls = new THREE.OrbitControls(camera);
-			
-			var keys = new Array( 128 );
-			var key_W = false;
-			var key_A = false;
-			var key_S = false;
-			var key_D = false;
-			
-			for (var i = 0; i < keys.length; i++) {
-				keys[i] = false;
-			}
-			
-			window.addEventListener('keydown', keyPressed, false);
-			window.addEventListener('keyup', keyReleased, false);
-			
-			var move = 0.1;
-			
-			//COLLISION-RAYS
-				//VECTORS
-				var vecF = new THREE.Vector3(0, 0, -0.5);
-				var vecB = new THREE.Vector3(0, 0, 0.5);
-				var vecL = new THREE.Vector3(-0.5, 0, 0);
-				var vecR = new THREE.Vector3(0.5, 0, 0);
-				
-				//FRONT
-				var rayFM = new THREE.Raycaster(camera.position, new THREE.Vector3(0, 0, -1), 0.4, 0.6);
-				var rayFL = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecL), new THREE.Vector3(0, 0, -1), 0.4, 0.6);
-				var rayFR = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecR), new THREE.Vector3(0, 0, -1), 0.4, 0.6);
-				
-				//BACK
-				var rayBM = new THREE.Raycaster(camera.position, new THREE.Vector3(0, 0, 1), 0.4, 0.6);
-				var rayBL = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecL), new THREE.Vector3(0, 0, 1), 0.4, 0.6);
-				var rayBR = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecR), new THREE.Vector3(0, 0, 1), 0.4, 0.6);
-				
-				//LEFT
-				var rayLM = new THREE.Raycaster(camera.position, new THREE.Vector3(-1, 0, 0), 0.4, 0.6);
-				var rayLF = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecF), new THREE.Vector3(-1, 0, 0), 0.4, 0.6);
-				var rayLB = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecB), new THREE.Vector3(-1, 0, 0), 0.4, 0.6);
-				
-				//RIGHT
-				var rayRM = new THREE.Raycaster(camera.position, new THREE.Vector3(1, 0, 0), 0.4, 0.6);
-				var rayRF = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecF), new THREE.Vector3(1, 0, 0), 0.4, 0.6);
-				var rayRB = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecB), new THREE.Vector3(1, 0, 0), 0.4, 0.6);
             
             //LIGHTS
                 //DIRECTIONAL LIGHT
@@ -218,9 +176,6 @@
             //FUNCTION
             function render(){            
                 renderer.render(scene,camera);
-				
-				update();
-				
                 requestAnimationFrame(render);
                 
                 
@@ -228,109 +183,16 @@
                 //document.addEventListener('keypress', checkKeys, false );
               
             }
-			
-			//UPDATE
-			function update() {
-				keyUpdate();
-				rayUpdate();
-				movement();
-			}
-			
-			function keyUpdate () {
-				key_W = keys[87];
-				key_A = keys[65];
-				key_S = keys[83];
-				key_D = keys[68];
-			}
-			
-			function rayUpdate() {
-				//FRONT
-				rayFM.set(camera.position, new THREE.Vector3(0, 0, -1));
-				rayFL.set(new THREE.Vector3().addVectors(camera.position, vecL), new THREE.Vector3(0, 0, -1));
-				rayFR.set(new THREE.Vector3().addVectors(camera.position, vecR), new THREE.Vector3(0, 0, -1));				
-				
-				//BACK
-				rayBM.set(camera.position, new THREE.Vector3(0, 0, 1));
-				rayBL.set(new THREE.Vector3().addVectors(camera.position, vecL), new THREE.Vector3(0, 0, 1));
-				rayBR.set(new THREE.Vector3().addVectors(camera.position, vecR), new THREE.Vector3(0, 0, 1));
-				
-				//LEFT
-				rayLM.set(camera.position, new THREE.Vector3(-1, 0, 0));
-				rayLF.set(new THREE.Vector3().addVectors(camera.position, vecF), new THREE.Vector3(-1, 0, 0));
-				rayLB.set(new THREE.Vector3().addVectors(camera.position, vecB), new THREE.Vector3(-1, 0, 0));
-				
-				//RIGHT
-				rayRM.set(camera.position, new THREE.Vector3(1, 0, 0));
-				rayRF.set(new THREE.Vector3().addVectors(camera.position, vecF), new THREE.Vector3(1, 0, 0));
-				rayRB.set(new THREE.Vector3().addVectors(camera.position, vecB), new THREE.Vector3(1, 0, 0));
-			}
-			
-			//COLLSION
-			function checkCollision(ray1, ray2, ray3) {
-				var collide1 = ray1.intersectObjects(scene.children);
-				var collide2 = ray2.intersectObjects(scene.children);
-				var collide3 = ray3.intersectObjects(scene.children);
-				
-				if ( collide1.length > 0 || collide2.length > 0 || collide3.length > 0) {
-					return true;
-				}
-				else {
-					return false;
-				}
-			}
+
+
+
+
 
             // Controls 2.0 – Pointer Lock Controls
+           
+            
             
              // CONTROLS
-			function keyPressed(event){
-				keys[event.keyCode] = true;
-			}
-			
-			function keyReleased(event){
-				keys[event.keyCode] = false;
-			}
-			
-			function movement() {
-				
-			
-				if (key_W) {
-					if (checkCollision(rayFM, rayFL, rayFR)) {
-						move = 0;
-					}
-					else {
-						move = 0.1;
-					}
-					camera.position.z -= move;
-				}
-				if (key_A) {
-					if (checkCollision(rayLM, rayLF, rayLB)) {
-						move = 0;
-					}
-					else {
-						move = 0.1;
-					}
-					camera.position.x -= move;
-				}
-				if (key_S) {
-					if (checkCollision(rayBM, rayBL, rayBR)) {
-						move = 0;
-					}
-					else {
-						move = 0.1;
-					}
-					camera.position.z += move;
-				}
-				if (key_D) {
-					if (checkCollision(rayRM, rayRF, rayRB)) {
-						move = 0;
-					}
-					else {
-						move = 0.1;
-					}
-					camera.position.x += move;
-				}
-			}
-			 
             function checkKeys(event){
             // Key-Numbers: http://help.adobe.com/en_US/AS2LCR/Flash_10.0/help.html?content=00000520.html
                 
@@ -383,7 +245,10 @@
                 else if(event.keyCode === 39){ 
                     camera.rotation.y -= rot; 
                 }
+
             }
+           
+
 
             render();
         </script>
