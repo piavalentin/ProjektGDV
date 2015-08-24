@@ -26,7 +26,7 @@
         <script>
             //SCENE
             var scene = new THREE.Scene();
-            scene.fog = new THREE.Fog(0xffffff, 0, 45);
+            //scene.fog = new THREE.Fog(0xffffff, 0, 45);
             
             
             //CAMERA
@@ -44,7 +44,7 @@
             
             
             //CONTROLS
-            //controls = new THREE.OrbitControls(camera);
+            controls = new THREE.OrbitControls(camera);
             
             
             //LIGHTS
@@ -235,7 +235,7 @@
                 spotLight.target.updateMatrixWorld();
                 
                 // Controls
-                document.addEventListener('keypress', checkKeys, false );
+                //document.addEventListener('keypress', checkKeys, false );
               
             }
 
