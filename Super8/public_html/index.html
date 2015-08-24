@@ -28,41 +28,12 @@
             var scene = new THREE.Scene();
             scene.fog = new THREE.Fog(0xffffff, 0, 45);
             
+            
             //CAMERA
-            var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000); //Perspective(field of view, aspect ratio, near, far)
-            camera.position.set(0, 1, 20);
+            var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 1.5, 30);
             
-            //CONTROLS
-            controls = new THREE.OrbitControls(camera);
             
-            //LIGHTS
-                //DIRECTIONAL LIGHT
-                var directionalLight = new THREE.DirectionalLight("white");
-                directionalLight.position.set(20,20,20);
-                directionalLight.target.position.set(0,0,0);
-                directionalLight.castShadow = true;
-                directionalLight.shadowDarkness = 0.5;
-
-                directionalLight.shadowCameraNear = 0;
-                directionalLight.shadowCameraFar = 100;
-
-                directionalLight.shadowCameraLeft = -30;
-                directionalLight.shadowCameraRight = 30;
-                directionalLight.shadowCameraTop = 30;
-                directionalLight.shadowCameraBottom = -30;
-
-                directionalLight.shadowCameraVisible = true;
-                
-                directionalLight.shadowMapWidth = 2048;
-                directionalLight.shadowMapHeight = 2048;
-                scene.add(directionalLight);
-
-                //HEMISPHERE LIGHT
-                var hemiLight = new THREE.HemisphereLight("white", 0.01);
-                hemiLight.position.y = 1;
-                //scene.add(hemiLight);
-
-
             //RENDERER
             var renderer = new THREE.WebGLRenderer({antialias: true});
             renderer.setSize(window.innerWidth, window.innerHeight);
@@ -70,6 +41,43 @@
             renderer.shadowMapSoft = true;
             renderer.shadowMapType = THREE.PCFSoftShadowMap;
             document.body.appendChild(renderer.domElement);
+            
+            
+            //CONTROLS
+            //controls = new THREE.OrbitControls(camera);
+            
+            
+            //LIGHTS
+                //DIRECTIONAL LIGHT
+                var directionalLight = new THREE.DirectionalLight("white", 0.5);
+                directionalLight.position.set(40, 40, 40);
+                directionalLight.target.position.set(0, 0, 10);
+                directionalLight.castShadow = true;
+                directionalLight.shadowDarkness = 0.5;
+
+                directionalLight.shadowCameraNear = 0;
+                directionalLight.shadowCameraFar = 100;
+
+                directionalLight.shadowCameraLeft = -35;
+                directionalLight.shadowCameraRight = 35;
+                directionalLight.shadowCameraTop = 35;
+                directionalLight.shadowCameraBottom = -35;
+
+                directionalLight.shadowCameraVisible = true;
+                
+                directionalLight.shadowMapWidth = 2048;
+                directionalLight.shadowMapHeight = 2048;
+                scene.add(directionalLight);
+                
+                //SPOT LIGHT
+                var spotLight = new THREE.SpotLight("blue", 1, 10, 0.5, 2);
+                spotLight.target.position.set(0, 0, 0);
+                spotLight.position.set(0, 2.49, 0);
+                spotLight.shadowCameraVisible = true;
+                spotLight.castShadow = true;
+                spotLight.shadowCameraNear = 0.1;
+                spotLight.shadowCameraFar = 30;
+                scene.add(spotLight);
 
 
             //GEOMETRY
@@ -94,7 +102,7 @@
                 var house = new THREE.Mesh(house_geometry, house_material);
                 house.position.y = + 1.26;
                 house.castShadow = true;
-                house.reveiveShadow = true;
+                house.receiveShadow = true;
                 scene.add(house);
                 
                     //SIDES
@@ -113,8 +121,8 @@
                     roof_side_geometry.faceVertexUvs[0].push([uvs[0], uvs[1], uvs[2]]);
                     var roof_side_material = new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture("textures/house/wood.jpg"), bumpMap: THREE.ImageUtils.loadTexture("textures/house/wood_DISP.jpg"), bumpScale: 0.1, side: THREE.DoubleSide});
                     var side_left = new THREE.Mesh(roof_side_geometry, roof_side_material);
-                    side_left.receiveShadow.true;
                     side_left.castShadow = true;
+                    side_left.receiveShadow = true;
                     scene.add(side_left);
 
                     var side_right = side_left.clone();
@@ -149,7 +157,7 @@
                     var grass_array = [];
                     var x = -25;
                     var z = -25;
-                    for(var i = 0; i < 144; i++){
+                    for(var i = 0; i < 154; i++){
                         grass_array.push(new THREE.Mesh(grass_geometry, grass_material));
                         grass_array[i].position.set(x, 0, z);
                         grass_array[i].rotateX(-Math.PI/2);
@@ -162,15 +170,60 @@
                         }
                     }
                     
-                    //TEST TREES                    
+                    //TREES                  
                     var loader = new THREE.JSONLoader();
                     loader.load("models/tree.json", function(geometry){
                         var material = new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture("textures/ground/bark.jpg"), bumpMap: THREE.ImageUtils.loadTexture("textures/ground/bark_DISP.jpg"), bumpScale: 0.1});
-                        var mesh = new THREE.Mesh(geometry, material);
-                        mesh.position.set(0, 0, 10);
-                        mesh.castShadow = true;
-                        scene.add(mesh);
+                        
+                        var tree0 = new THREE.Mesh(geometry, material);
+                        tree0.position.set(8, 0, 2);
+                        tree0.castShadow = true;
+                        
+                        var tree1 = new THREE.Mesh(geometry, material);
+                        tree1.position.set(5, 0, 10);
+                        tree1.castShadow = true;
+                        
+                        var tree2 = new THREE.Mesh(geometry, material);
+                        tree2.position.set(-10, 0, 20);
+                        tree2.castShadow = true;
+                        
+                        var tree3 = new THREE.Mesh(geometry, material);
+                        tree3.position.set(-15, 0, -15);
+                        tree3.castShadow = true;
+                        
+                        var tree4 = new THREE.Mesh(geometry, material);
+                        tree4.position.set(25, 0, -23);
+                        tree4.castShadow = true;
+                        
+                        var tree5 = new THREE.Mesh(geometry, material);
+                        tree5.position.set(-20, 0, 3);
+                        tree5.castShadow = true;
+                        
+                        var tree6 = new THREE.Mesh(geometry, material);
+                        tree6.position.set(22, 0, 35);
+                        tree6.castShadow = true;
+                        
+                        var tree7 = new THREE.Mesh(geometry, material);
+                        tree7.position.set(18, 0, 8);
+                        tree7.castShadow = true;
+                        
+                        var tree8 = new THREE.Mesh(geometry, material);
+                        tree8.position.set(-18, 0, 30);
+                        tree8.castShadow = true;
+                        
+                        var tree9 = new THREE.Mesh(geometry, material);
+                        tree9.position.set(0, 0, -15);
+                        tree9.castShadow = true;
+                        
+                        scene.add(tree0, tree1, tree2, tree3, tree4, tree5, tree6, tree7, tree8, tree9);
                     });
+                    
+                    
+                //TEST
+                var cube = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 0.5), new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture("textures/ground/bark.jpg")}));
+                cube.position.set(0, 1, 0);
+                cube.castShadow = true;
+                scene.add(cube);
                     
             
             //FUNCTION
@@ -178,9 +231,11 @@
                 renderer.render(scene,camera);
                 requestAnimationFrame(render);
                 
+                //UPDATE POSITIONS
+                spotLight.target.updateMatrixWorld();
                 
                 // Controls
-                //document.addEventListener('keypress', checkKeys, false );
+                document.addEventListener('keypress', checkKeys, false );
               
             }
 
