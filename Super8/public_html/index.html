@@ -29,10 +29,15 @@
             scene.fog = new THREE.Fog("grey", 0, 30);
             
             
+            
             //CAMERA
             var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+<<<<<<< HEAD
             camera.position.set(0, 1.5, 3);
             
+=======
+            camera.position.set(0, 1.5, 40);
+>>>>>>> 8658887ea7a937c7e1fc01205e186093bff2d5f7
             
             //RENDERER
             var renderer = new THREE.WebGLRenderer({antialias: true});
@@ -474,6 +479,35 @@
 
             render();
         </script>
+        
+        
+        <!-- AUDIO -->
+        <script>
+            function setVolume()
+            {
+                sound1 = document.getElementById("standardbackgroundmusic");
+                sound1.volume = 0.4;
+                
+                sound2 = document.getElementById("rainmusic");
+                sound2.volume = 0.5;
+            }
+            
+            window.onload = setVolume;
+        </script>
+        
+        
+        <!-- STANDARD AUDIO BACKGROUND -->
+        <audio autoplay loop id="standardbackgroundmusic">
+                <source src="sounds/scarynight.ogg">
+                <source src="sounds/scarynight.mp3">
+        </audio>
+        
+        <!-- RAIN AUDIO BACKGROUND -->
+        <audio autoplay loop id="rainmusic">
+               <source src="sounds/rain.ogg">
+                <source src="sounds/rain.mp3">
+        </audio>
+        
         
     </body>
 </html>
