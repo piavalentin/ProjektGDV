@@ -26,7 +26,7 @@
         <script>
             //SCENE
             var scene = new THREE.Scene();
-            //scene.fog = new THREE.Fog("grey", 0, 30);
+            scene.fog = new THREE.Fog("grey", 0, 30);
             
             
             
@@ -35,7 +35,7 @@
             camera.position.set(0, 1.5, 30);
             
             //RENDERER
-            var renderer = new THREE.WebGLRenderer({antialias: false});
+            var renderer = new THREE.WebGLRenderer({antialias: true});
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.shadowMapEnabled = true;
             renderer.shadowMapSoft = true;
@@ -344,9 +344,9 @@
                     
                     
                 //PARTICLE SYSTEM
-                var particle_count = 50000;
+                var particle_count = 500000;
                 var particles = new THREE.Geometry();
-                particle_material = new THREE.PointCloudMaterial({color: "grey", size: 0.01});
+                particle_material = new THREE.PointCloudMaterial({color: "rgb(28,134,238)", size: 0.005});
                 
                 for(var p = 0; p < particle_count; p++){
                     var x = Math.random() * 60 - 30;
@@ -360,9 +360,9 @@
                     
                     
                 //TEST
-                var cube = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 0.5), new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture("textures/ground/bark.jpg")}));
-                cube.position.set(3, 0.25, 1.5);
-                cube.castShadow = true;
+                //var cube = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 0.5), new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture("textures/ground/bark.jpg")}));
+                //cube.position.set(3, 0.25, 1.5);
+                //cube.castShadow = true;
                 //scene.add(cube);
                     
             
@@ -371,9 +371,9 @@
                 for(var i = 0; i < particles.vertices.length; i++){
                     particles.verticesNeedUpdate = true;
                     if(particles.vertices[i].y < 0){
-                        particles.vertices[i].y = 10;
+                        particles.vertices[i].y = Math.random() * 10 + 8;
                     }
-                    particles.vertices[i].y -= Math.random() * 2 + 2;
+                    particles.vertices[i].y -= 1;
                 }              
             }
             
@@ -391,10 +391,10 @@
                 requestAnimationFrame(render);
                 
                 //UPDATE POSITIONS
-                //spotLight.target.updateMatrixWorld();
+                spotLight.target.updateMatrixWorld();
                 
                 //CONTROLS
-                //document.addEventListener('keypress', checkKeys, false );
+                document.addEventListener('keypress', checkKeys, false );
               
             }
             
