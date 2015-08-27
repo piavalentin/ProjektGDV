@@ -26,21 +26,16 @@
         <script>
             //SCENE
             var scene = new THREE.Scene();
-            scene.fog = new THREE.Fog("grey", 0, 30);
+            //scene.fog = new THREE.Fog("grey", 0, 30);
             
             
             
             //CAMERA
             var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-<<<<<<< HEAD
-            camera.position.set(0, 1.5, 3);
-            
-=======
-            camera.position.set(0, 1.5, 40);
->>>>>>> 8658887ea7a937c7e1fc01205e186093bff2d5f7
+            camera.position.set(0, 1.5, 30);
             
             //RENDERER
-            var renderer = new THREE.WebGLRenderer({antialias: true});
+            var renderer = new THREE.WebGLRenderer({antialias: false});
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.shadowMapEnabled = true;
             renderer.shadowMapSoft = true;
@@ -292,35 +287,63 @@
                     });
                     
                     
+                //PARTICLE SYSTEM
+                var particle_count = 50000;
+                var particles = new THREE.Geometry();
+                particle_material = new THREE.PointCloudMaterial({color: "grey", size: 0.01});
+                
+                for(var p = 0; p < particle_count; p++){
+                    var x = Math.random() * 60 - 30;
+                    var y = Math.random() * 10 + 8;
+                    var z = Math.random() * 70 - 30;
+                    particles.vertices.push(new THREE.Vector3(x, y, z));
+                }
+                
+                var particle_system = new THREE.PointCloud(particles, particle_material);
+                scene.add(particle_system);
+                    
+                    
                 //TEST
                 var cube = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 0.5), new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture("textures/ground/bark.jpg")}));
                 cube.position.set(3, 0.25, 1.5);
                 cube.castShadow = true;
-                scene.add(cube);
+                //scene.add(cube);
                     
             
             //FUNCTION
+            function updateParticleSystem(){
+                for(var i = 0; i < particles.vertices.length; i++){
+                    particles.verticesNeedUpdate = true;
+                    if(particles.vertices[i].y < 0){
+                        particles.vertices[i].y = 10;
+                    }
+                    particles.vertices[i].y -= Math.random() * 2 + 2;
+                }              
+            }
+            
             function render(){                
                 //MIRROR CUBECAMERA UPDATE
                 mirror.visible = false;
                 mirror_camera.updateCubeMap(renderer, scene);
                 mirror.visible = true;
                 
+                //PARTICLE
+                updateParticleSystem();
+                
                 //RENDERER
-                renderer.render(scene,camera);
-				
-                update();
-				
+                renderer.render(scene,camera);				
                 requestAnimationFrame(render);
                 
+                update();
+                
                 //UPDATE POSITIONS
-                spotLight.target.updateMatrixWorld();
+                //spotLight.target.updateMatrixWorld();
                 
                 //CONTROLS
                 //document.addEventListener('keypress', checkKeys, false );
               
             }
-			
+            
 			//UPDATE
 			function update() {
 				keyUpdate();
