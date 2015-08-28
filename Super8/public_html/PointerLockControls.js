@@ -7,12 +7,16 @@ THREE.PointerLockControls = function ( camera ) {
 	var scope = this;
 
 	camera.rotation.set( 0, 0, 0 );
+        
+        //controls.getObject().position.set( 1100, 150, -50 );
 
 	var pitchObject = new THREE.Object3D();
 	pitchObject.add( camera );
 
 	var yawObject = new THREE.Object3D();
-	yawObject.position.y = 10;
+	yawObject.position.y = 1.7;
+        yawObject.position.x = 15;
+        yawObject.rotation.y = 290.5;
 	yawObject.add( pitchObject );
 
 	var PI_2 = Math.PI / 2;
@@ -56,7 +60,7 @@ THREE.PointerLockControls = function ( camera ) {
 
 			return v;
 
-		};
+		}
 
 	}();
 

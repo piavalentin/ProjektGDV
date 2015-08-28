@@ -15,6 +15,28 @@
                 margin: 0px;
                 overflow: hidden;
             }
+            
+            
+            #blockscreen{
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                background-color: transparent;
+            }
+            
+            #anleitung{   
+                position: absolute;
+                margin-top: 10%;
+                margin-left: 5%;
+                background-color: transparent;
+                font-size: 50px;
+                font-family: Helvetica;
+                font-weight: 100;
+                color: white;
+                cursor: pointer;
+            }
+            
+            
         </style>
         
     </head>
@@ -22,8 +44,24 @@
         
         <script src="three.min.js"></script>
         <script src="PointerLockControls.js"></script>
+        
+        <!-- Orbit Controls: --->
         <script src="controls.js"></script>
+        
+        <div id="blockscreen">
+            <div id="anleitung">
+                <center>
+                <p> HEY BITCHES ICH HAB DIE STEUERUNG HINBEKOMMEN! </p>
+                Start per Klick, <br>WASD oder Arrow-Keys für die Steuerung ESC: "Pause"
+                <p> Küsschen.</p>
+                </center>
+            </div>
+        </div>
+        
         <script>
+            
+            
+            
             //SCENE
             var scene = new THREE.Scene();
             scene.fog = new THREE.Fog("grey", 0, 30);
@@ -32,7 +70,9 @@
             
             //CAMERA
             var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.set(0, 1.5, 30);
+            //camera.position.set(0, 1.5, 30);
+            
+            
             
             //RENDERER
             var renderer = new THREE.WebGLRenderer({antialias: true});
@@ -43,7 +83,7 @@
             document.body.appendChild(renderer.domElement);
             
             
-            //CONTROLS
+            // Orbit CONTROLS
             controls = new THREE.OrbitControls(camera);
 			
 			var keys = new Array( 128 );
@@ -56,8 +96,8 @@
 				keys[i] = false;
 			}
 			
-			window.addEventListener('keydown', keyPressed, false);
-			window.addEventListener('keyup', keyReleased, false);
+			//window.addEventListener('keydown', keyPressed, false);
+			//window.addEventListener('keyup', keyReleased, false);
 			
 			var move = 0.1;
 			
@@ -343,20 +383,29 @@
                     });
                     
                     
-                //PARTICLE SYSTEM
-                var particle_count = 500000;
-                var particles = new THREE.Geometry();
-                particle_material = new THREE.PointCloudMaterial({color: "rgb(28,134,238)", size: 0.005});
-                
-                for(var p = 0; p < particle_count; p++){
-                    var x = Math.random() * 60 - 30;
-                    var y = Math.random() * 10 + 8;
-                    var z = Math.random() * 70 - 30;
-                    particles.vertices.push(new THREE.Vector3(x, y, z));
-                }
-                
-                var particle_system = new THREE.PointCloud(particles, particle_material);
-                scene.add(particle_system);
+                    
+                    
+                    
+                    
+//                //PARTICLE SYSTEM
+//                var particle_count = 500000;
+//                var particles = new THREE.Geometry();
+//                particle_material = new THREE.PointCloudMaterial({color: "rgb(28,134,238)", size: 0.005});
+//                
+//                for(var p = 0; p < particle_count; p++){
+//                    var x = Math.random() * 60 - 30;
+//                    var y = Math.random() * 10 + 8;
+//                    var z = Math.random() * 70 - 30;
+//                    particles.vertices.push(new THREE.Vector3(x, y, z));
+//                }
+//                
+//                var particle_system = new THREE.PointCloud(particles, particle_material);
+//                scene.add(particle_system);
+//                    
+                    
+                    
+                    
+                    
                     
                     
                 //TEST
@@ -392,10 +441,7 @@
                 
                 //UPDATE POSITIONS
                 spotLight.target.updateMatrixWorld();
-                
-                //CONTROLS
                 //document.addEventListener('keypress', checkKeys, false );
-              
             }
             
 			//UPDATE
@@ -471,7 +517,7 @@
       
             
             
-             // CONTROLS
+             // CONTROLS – Sterling
 			function keyPressed(event){
 				keys[event.keyCode] = true;
 			}
@@ -520,62 +566,166 @@
 					camera.position.x += move;
 				}
 			}
-			 
-//            function checkKeys(event){
-//            // Key-Numbers: http://help.adobe.com/en_US/AS2LCR/Flash_10.0/help.html?content=00000520.html
-//                
-//                event = event || window.event;
-//                //var keyCode = event.which;
-//                var pos = 0.4; // movement
-//                var rot = 0.1; // rotation
-//                
-//                // Position
-//                // W-Key :: Up
-//                if (event.charCode === 119){
-//                    camera.position.z -= pos;
-//                    //camera.position.y += 0.1;
-//                    //camera.position.y -= 0.1;
-//                }
-//                
-//                // S-Key – Down
-//                else if (event.charCode === 115){
-//                    camera.position.z += pos;
-//                }
-//               
-//                // A-Key – Left
-//                else if (event.charCode === 97){
-//                    camera.position.x -= pos;
-//                }
-//                
-//                // D-Key – Right
-//                else if(event.charCode === 100){
-//                    camera.position.x += pos;
-//                }
-//                
-//                
-//                // Rotation
-//                // Arrow up - Rotate up
-//                else if (event.keyCode === 38){ 
-//                    camera.rotation.x += rot;
-//                } 
-//                
-//                // Arrow down - Rotate down
-//                else if(event.keyCode === 40){ 
-//                    camera.rotation.x -= rot; 
-//                } 
-//                
-//                // Arrow left 
-//                else if(event.keyCode === 37){ 
-//                    camera.rotation.y += rot; 
-//                } 
-//                
-//                // Arrow right 
-//                else if(event.keyCode === 39){ 
-//                    camera.rotation.y -= rot; 
-//                }
-//            }
+	
+    
+    
+    
+    
+            // Diesen Bereich AB HIER komplett kommentieren um OrbitControls zu nutzen!!!
+            // Und ganz oben camera.set.position wieder auskommentieren + DIV-Bereiche kommentieren
+                            
+            // CONTROLS - PointerLockControls 
+            // http://www.html5rocks.com/en/tutorials/pointerlock/intro/
+            var blockscreen = document.getElementById('blockscreen');
+            var anleitung = document.getElementById('anleitung');
+            
+            var controls = new THREE.PointerLockControls(camera);
+            scene.add(controls.getObject());
+            
+            var havePointerLock = 'pointerLockElement' in document || 
+                    'mozPointerLockElement' in document || 
+                    'webkitPointerLockElement' in document;
+
+            if(havePointerLock){
+                var element = document.body;
+                var pointerlockchange = function(event){
+                    if (document.pointerLockElement === element || 
+                            document.mozPointerLockElement === element || 
+                            document.webkitPointerLockElement === element){
+                        
+                        controlsEnabled = true;
+			controls.enabled = true;
+                        blockscreen.style.display = 'none';
+                        
+                    } else {
+                        controls.enabled = false;
+			blockscreen.style.display = '';
+			anleitung.style.display = '';
+                    }
+                }
+                
+                
+                var pointerlockerror = function (event){
+                    anleitung.style.display = '';
+                }
+
+		// Hook pointer lock state change events
+                document.addEventListener('pointerlockchange', pointerlockchange, false);
+                document.addEventListener('mozpointerlockchange', pointerlockchange, false);
+                document.addEventListener('webkitpointerlockchange', pointerlockchange, false);
+
+                document.addEventListener('pointerlockerror', pointerlockerror, false);
+                document.addEventListener('mozpointerlockerror', pointerlockerror, false);
+                document.addEventListener('webkitpointerlockerror', pointerlockerror, false);
+
+                anleitung.addEventListener('click', function(event){
+                    anleitung.style.display = 'none';
+                    
+                    // Ask the browser to lock the pointer
+                    element.requestPointerLock = element.requestPointerLock || 
+                            element.mozRequestPointerLock || 
+                            element.webkitRequestPointerLock;
+                    element.requestPointerLock();
+			
+                    // Firefox oder Chrome    
+                    if (/Firefox/i.test(navigator.userAgent)){
+                        document.exitPointerLock = document.exitPointerLock ||
+			   document.mozExitPointerLock ||
+			   document.webkitExitPointerLock;
+                           document.exitPointerLock();
+                    }
+                }, false);
+            } 
+            else{
+                anleitung.innerHTML = 'Bist du uncool. Your browser doesn\'t seem to support Pointer Lock API';
+            }
+            
+            
+            var controlsEnabled = false;
+
+            var moveForward = false;
+            var moveBackward = false;
+            var moveLeft = false;
+            var moveRight = false;
+
+            var prevTime = performance.now();
+            var velocity = new THREE.Vector3();
+
+            checkKeys();
+            animate();
+
+            function checkKeys(event){
+            // Key-Numbers: http://help.adobe.com/en_US/AS2LCR/Flash_10.0/help.html?content=00000520.html
+                var onKeyDown = function(event){
+                
+                    // up oder w
+                    if(event.keyCode === 38 || event.keyCode === 87) {
+                        moveForward = true;
+                    }
+                    // left oder a
+                    if(event.keyCode === 37 || event.keyCode === 65 ) {
+                        moveLeft = true; 
+                    }
+                    // down oder s
+                    if(event.keyCode === 40 || event.keyCode === 83 ) {
+                        moveBackward = true;
+                    }
+                    // right oder d
+                    if(event.keyCode === 39 || event.keyCode === 68 ) {
+                        moveRight = true;
+                    }
+                };
+
+                var onKeyUp = function(event){
+                    // up oder w
+                    if(event.keyCode === 38 || event.keyCode === 87) {
+                        moveForward = false;
+                    }
+                    // left oder a
+                    if(event.keyCode === 37 || event.keyCode === 65 ) {
+                        moveLeft = false; 
+                    }
+                    // down oder s
+                    if(event.keyCode === 40 || event.keyCode === 83 ) {
+                        moveBackward = false;
+                    }
+                    // right oder d
+                    if(event.keyCode === 39 || event.keyCode === 68 ) {
+                        moveRight = false;
+                    }
+                };
+
+            document.addEventListener( 'keydown', onKeyDown, false );
+            document.addEventListener( 'keyup', onKeyUp, false ); 
+        }
+        
+        
+        function animate(){
+            requestAnimationFrame(animate);
+            
+            if(controlsEnabled){		
+                var time = performance.now();
+                var delta = (time - prevTime) / 1000;
+
+                velocity.x -= velocity.x * 10.0 * delta;
+                velocity.z -= velocity.z * 10.0 * delta;
+
+                if(moveForward) velocity.z -= 25.0 * delta;
+                if(moveBackward) velocity.z += 25.0 * delta;
+
+                if(moveLeft) velocity.x -= 25.0 * delta;
+                if(moveRight) velocity.x += 25.0 * delta;
+
+
+                controls.getObject().translateX( velocity.x * delta );
+                controls.getObject().translateZ( velocity.z * delta );
+                prevTime = time;
+
+        }
+        // BIS HIER! und die Klammer unten noch 
 
             render();
+        }
         </script>
         
         
@@ -587,7 +737,7 @@
                 sound1.volume = 0.4;
                 
                 sound2 = document.getElementById("rainmusic");
-                sound2.volume = 0.5;
+                sound2.volume = 0.6;
             }
             
             window.onload = setVolume;
