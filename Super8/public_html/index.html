@@ -27,9 +27,9 @@
             #anleitung{   
                 position: absolute;
                 margin-top: 10%;
-                margin-left: 5%;
+                margin-left: 10%;
                 background-color: transparent;
-                font-size: 50px;
+                font-size: 40px;
                 font-family: Helvetica;
                 font-weight: 100;
                 color: white;
@@ -51,6 +51,7 @@
         <div id="blockscreen">
             <div id="anleitung">
                 <center>
+                    <img src="logo/paranormal.png" alt="Paranormal"><br><br>
                 <p> HEY VOLL TOLL ICH HAB DIE STEUERUNG HINBEKOMMEN! </p>
                 Start per Klick, <br>WASD oder Arrow-Keys für die Steuerung ESC: "Pause"
                 <p> Küsschen.</p>
@@ -571,6 +572,14 @@
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
               
             // CONTROLS - PointerLockControls 
             // http://www.html5rocks.com/en/tutorials/pointerlock/intro/
@@ -635,7 +644,7 @@
                 }, false);
             } 
             else{
-                anleitung.innerHTML = 'Bist du uncool. Your browser doesn\'t seem to support Pointer Lock API';
+                anleitung.innerHTML = 'Bist du uncool. <br>Your browser doesn\'t seem to support Pointer Lock API<br>einfach in Firefox öffnen';
             }
             
             
@@ -734,6 +743,9 @@
 
         }
         
+        
+        
+        
         render();
         }
         </script>
@@ -757,6 +769,8 @@
         </script>
         
         
+        
+       
         <!-- STANDARD AUDIO BACKGROUND -->
         <audio autoplay loop id="standardbackgroundmusic">
                 <source src="sounds/scarynight.ogg">
@@ -769,7 +783,7 @@
                 <source src="sounds/rain.mp3">
         </audio>
         
-        
+        <!-- Walking Sound -->
         <audio loop id="walksound">
             <source src="sounds/walk.mp3">
             <source src="sounds/walk.ogg">
