@@ -54,7 +54,7 @@
                     <img src="logo/paranormal.png" alt="Paranormal"><br><br>
                 <p> HEY VOLL TOLL ICH HAB DIE STEUERUNG HINBEKOMMEN! </p>
                 Start per Klick, <br>WASD/Arrow-Keys für die Steuerung, ESC: "Pause"
-                <br> Maus: Look Around.
+                <br> Maus: Drehen/ Look Around.
                 <p> Küsschen. PS: bisher nur Firefox kompatibel <br>
                     PS: OrbitControls funktionieren nicht mehr</p>
                 </center>
@@ -636,7 +636,7 @@
                     element.requestPointerLock();
 			
                     // Firefox oder Chrome (folgt noch)   
-                    if (/Firefox/i.test(navigator.userAgent)){
+                    if (/Firefox/i.test(navigator.userAgent) || /OPR\/(\d+\.\d+)/i.test(navigator.userAgent)){
                         document.exitPointerLock = document.exitPointerLock ||
 			   document.mozExitPointerLock ||
 			   document.webkitExitPointerLock;
