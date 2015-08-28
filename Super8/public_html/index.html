@@ -51,9 +51,10 @@
         <div id="blockscreen">
             <div id="anleitung">
                 <center>
-                <p> HEY BITCHES ICH HAB DIE STEUERUNG HINBEKOMMEN! </p>
+                <p> HEY VOLL TOLL ICH HAB DIE STEUERUNG HINBEKOMMEN! </p>
                 Start per Klick, <br>WASD oder Arrow-Keys für die Steuerung ESC: "Pause"
                 <p> Küsschen.</p>
+                <p>PS: bisher nur Firefox kompatibel </p>
                 </center>
             </div>
         </div>
@@ -96,8 +97,8 @@
 				keys[i] = false;
 			}
 			
-			//window.addEventListener('keydown', keyPressed, false);
-			//window.addEventListener('keyup', keyReleased, false);
+			window.addEventListener('keydown', keyPressed, false);
+			window.addEventListener('keyup', keyReleased, false);
 			
 			var move = 0.1;
 			
@@ -415,16 +416,16 @@
                 //scene.add(cube);
                     
             
-            //FUNCTION
-            function updateParticleSystem(){
-                for(var i = 0; i < particles.vertices.length; i++){
-                    particles.verticesNeedUpdate = true;
-                    if(particles.vertices[i].y < 0){
-                        particles.vertices[i].y = Math.random() * 10 + 8;
-                    }
-                    particles.vertices[i].y -= 1;
-                }              
-            }
+//            //FUNCTION
+//            function updateParticleSystem(){
+//                for(var i = 0; i < particles.vertices.length; i++){
+//                    particles.verticesNeedUpdate = true;
+//                    if(particles.vertices[i].y < 0){
+//                        particles.vertices[i].y = Math.random() * 10 + 8;
+//                    }
+//                    particles.vertices[i].y -= 1;
+//                }              
+//            }
             
             function render(){                
                 //MIRROR CUBECAMERA UPDATE
@@ -441,7 +442,7 @@
                 
                 //UPDATE POSITIONS
                 spotLight.target.updateMatrixWorld();
-                //document.addEventListener('keypress', checkKeys, false );
+                
             }
             
 			//UPDATE
@@ -627,7 +628,7 @@
                             element.webkitRequestPointerLock;
                     element.requestPointerLock();
 			
-                    // Firefox oder Chrome    
+                    // Firefox oder Chrome (folgt noch)   
                     if (/Firefox/i.test(navigator.userAgent)){
                         document.exitPointerLock = document.exitPointerLock ||
 			   document.mozExitPointerLock ||
