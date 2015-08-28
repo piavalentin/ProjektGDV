@@ -54,8 +54,9 @@
                     <img src="logo/paranormal.png" alt="Paranormal"><br><br>
                 <p> HEY VOLL TOLL ICH HAB DIE STEUERUNG HINBEKOMMEN! </p>
                 Start per Klick, <br>WASD oder Arrow-Keys für die Steuerung ESC: "Pause"
-                <p> Küsschen.</p>
-                <p>PS: bisher nur Firefox kompatibel </p>
+                <br> Mouse: Lock Around
+                <p> Küsschen. PS: bisher nur Firefox kompatibel <br>
+                    PS: OrbitControls funktionieren nicht mehr</p>
                 </center>
             </div>
         </div>
@@ -644,7 +645,7 @@
                 }, false);
             } 
             else{
-                anleitung.innerHTML = 'Bist du uncool. <br>Your browser doesn\'t seem to support Pointer Lock API<br>einfach in Firefox öffnen';
+                anleitung.innerHTML = 'Bist du uncool. <br>Your browser doesn\'t seem to support Pointer Lock API<br>Einfach in Firefox öffnen';
             }
             
             
@@ -675,17 +676,17 @@
                         
                     }
                     // left oder a
-                    if(event.keyCode === 37 || event.keyCode === 65 ) {
+                    if(event.keyCode === 37 || event.keyCode === 65) {
                         moveLeft = true;
                         walksound.play();
                     }
                     // down oder s
-                    if(event.keyCode === 40 || event.keyCode === 83 ) {
+                    if(event.keyCode === 40 || event.keyCode === 83) {
                         moveBackward = true;
                         walksound.play();
                     }
                     // right oder d
-                    if(event.keyCode === 39 || event.keyCode === 68 ) {
+                    if(event.keyCode === 39 || event.keyCode === 68) {
                         moveRight = true;
                         walksound.play();
                     }
@@ -699,24 +700,24 @@
                         walksound.pause();
                     }
                     // left oder a
-                    if(event.keyCode === 37 || event.keyCode === 65 ) {
+                    if(event.keyCode === 37 || event.keyCode === 65) {
                         moveLeft = false; 
                         walksound.pause();
                     }
                     // down oder s
-                    if(event.keyCode === 40 || event.keyCode === 83 ) {
+                    if(event.keyCode === 40 || event.keyCode === 83) {
                         moveBackward = false;
                         walksound.pause();
                     }
                     // right oder d
-                    if(event.keyCode === 39 || event.keyCode === 68 ) {
+                    if(event.keyCode === 39 || event.keyCode === 68) {
                         moveRight = false;
                         walksound.pause();
                     }
                 };
 
-            document.addEventListener( 'keydown', onKeyDown, false );
-            document.addEventListener( 'keyup', onKeyUp, false ); 
+            document.addEventListener('keydown', onKeyDown, false);
+            document.addEventListener('keyup', onKeyUp, false); 
         }
         
         
