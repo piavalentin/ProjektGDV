@@ -78,7 +78,7 @@
             
             
             //RENDERER
-            var renderer = new THREE.WebGLRenderer({antialias: true});
+            var renderer = new THREE.WebGLRenderer({antialias: false});
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.shadowMapEnabled = true;
             renderer.shadowMapSoft = true;
@@ -274,7 +274,7 @@
                     scene.add(roof_top_back);
                     
                     //MIRROR
-                    var mirror_camera = new THREE.CubeCamera(0.1, 15, 256);
+                    var mirror_camera = new THREE.CubeCamera(0.1, 15, 128);  //128 zu 1024 ändern
                     mirror_camera.position.set(-3, 1, -3.9);
                     scene.add(mirror_camera);
                     
@@ -383,17 +383,13 @@
                         
                         scene.add(tree0, tree1, tree2, tree3, tree4, tree5, tree6, tree7, tree8, tree9);
                         scene.add(th0, th1, th2, th3, th4, th5, th6, th7, th8, th9);
-                    });
+                    });    
                     
                     
-                    
-                    
-                    
-                    
-//                //PARTICLE SYSTEM
-//                var particle_count = 500000;
+                //PARTICLE SYSTEM
+//                var particle_count = 500;
 //                var particles = new THREE.Geometry();
-//                particle_material = new THREE.PointCloudMaterial({color: "rgb(28,134,238)", size: 0.005});
+//                particle_material = new THREE.PointCloudMaterial({color: "rgb(178,223,238)", size: 0.005});
 //                
 //                for(var p = 0; p < particle_count; p++){
 //                    var x = Math.random() * 60 - 30;
@@ -403,13 +399,8 @@
 //                }
 //                
 //                var particle_system = new THREE.PointCloud(particles, particle_material);
-//                scene.add(particle_system);
-//                    
-                    
-                    
-                    
-                    
-                    
+                //scene.add(particle_system);  
+
                     
                 //TEST
                 //var cube = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 0.5), new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture("textures/ground/bark.jpg")}));
@@ -418,16 +409,16 @@
                 //scene.add(cube);
                     
             
-//            //FUNCTION
-//            function updateParticleSystem(){
-//                for(var i = 0; i < particles.vertices.length; i++){
-//                    particles.verticesNeedUpdate = true;
-//                    if(particles.vertices[i].y < 0){
-//                        particles.vertices[i].y = Math.random() * 10 + 8;
-//                    }
-//                    particles.vertices[i].y -= 1;
-//                }              
-//            }
+            //FUNCTION
+            function updateParticleSystem(){
+                for(var i = 0; i < particles.vertices.length; i++){
+                    particles.verticesNeedUpdate = true;
+                    if(particles.vertices[i].y < 0){
+                        particles.vertices[i].y = Math.random() * 10 + 8;
+                    }
+                    particles.vertices[i].y -= 1;
+                }              
+            }
             
             function render(){                
                 //MIRROR CUBECAMERA UPDATE
@@ -435,6 +426,9 @@
                 mirror_camera.updateCubeMap(renderer, scene);
                 mirror.visible = true;
 				
+                //PARTICLE SYSTEM
+                //updateParticleSystem();
+                                
                 //RENDERER
                 renderer.render(scene,camera);	
 
@@ -568,19 +562,8 @@
 					}
 					camera.position.x += move;
 				}
-			}
-	
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+			}   
+                        
               
             // CONTROLS - PointerLockControls 
             // http://www.html5rocks.com/en/tutorials/pointerlock/intro/
@@ -610,12 +593,12 @@
 			blockscreen.style.display = '';
 			anleitung.style.display = '';
                     }
-                }
+                };
                 
                 
                 var pointerlockerror = function (event){
                     anleitung.style.display = '';
-                }
+                };
 
 		// Hook pointer lock state change events
                 document.addEventListener('pointerlockchange', pointerlockchange, false);
