@@ -2,6 +2,9 @@
  * @author mrdoob / http://mrdoob.com/
  * @modification pia
  */
+ 
+var pitchObject = new THREE.Object3D();
+var yawObject = new THREE.Object3D();
 
 THREE.PointerLockControls = function ( camera ) {
 
@@ -11,10 +14,8 @@ THREE.PointerLockControls = function ( camera ) {
         
         //controls.getObject().position.set( 1100, 150, -50 );
 
-	var pitchObject = new THREE.Object3D();
 	pitchObject.add( camera );
-
-	var yawObject = new THREE.Object3D();
+	
 	yawObject.position.y = 1.6;
         yawObject.position.x = 10;
         yawObject.position.z = -21;
@@ -34,7 +35,6 @@ THREE.PointerLockControls = function ( camera ) {
 		pitchObject.rotation.x -= movementY * 0.002;
 
 		pitchObject.rotation.x = Math.max( - PI_2, Math.min( PI_2, pitchObject.rotation.x ) );
-
 	};
 
 	document.addEventListener( 'mousemove', onMouseMove, false );
