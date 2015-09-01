@@ -415,9 +415,9 @@
                     
                     
                 //PARTICLE SYSTEM
-                var particle_count = 500;
+                var particle_count = 50000;
                 var particles = new THREE.Geometry();
-                particle_material = new THREE.PointCloudMaterial({color: "rgb(178,223,238)", size: 0.005});
+                particle_material = new THREE.PointCloudMaterial({map: THREE.ImageUtils.loadTexture("textures/particles/rain.png"), size: 0.1, alphaTest: 0.1});
                 
                 for(var p = 0; p < particle_count; p++){
                     var x = Math.random() * 60 - 30;
@@ -448,7 +448,7 @@
                 mirror.visible = true;
 				
                 //PARTICLE SYSTEM
-                //updateParticleSystem();
+                updateParticleSystem();
                                 
                 //RENDERER
                 renderer.render(scene,camera);	
@@ -466,7 +466,6 @@
 			function update() {
 				keyUpdate();
 				rayUpdate();
-                                updateParticleSystem();
 				//movement();
 			}
 			
@@ -784,9 +783,8 @@
                 prevTime = time;
 
 			}
-
-			render();
         }
+        render();
         </script>
         
         
