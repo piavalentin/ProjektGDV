@@ -130,40 +130,40 @@
             var dirDown = new THREE.Vector3(0, -1, 0);
 
             //FRONT
-            var rayFMU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecU), dirFront, 0.15, 0.45);
-            var rayFLU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecLU), dirFront, 0.15, 0.45);
-            var rayFRU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecRU), dirFront, 0.15, 0.45);
+            var rayFMU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecU), dirFront, 0.0, 0.3);
+            var rayFLU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecLU), dirFront, 0.0, 0.3);
+            var rayFRU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecRU), dirFront, 0.0, 0.3);
 
-            var rayFMD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecD), dirFront, 0.15, 0.45);
-            var rayFLD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecLD), dirFront, 0.15, 0.45);
-            var rayFRD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecRD), dirFront, 0.15, 0.45);
+            var rayFMD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecD), dirFront, 0.0, 0.3);
+            var rayFLD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecLD), dirFront, 0.0, 0.3);
+            var rayFRD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecRD), dirFront, 0.0, 0.3);
 
             //BACK
-            var rayBMU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecU), dirBack, 0.15, 0.45);
-            var rayBLU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecLU), dirBack, 0.15, 0.45);
-            var rayBRU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecRU), dirBack, 0.15, 0.45);
+            var rayBMU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecU), dirBack, 0.0, 0.3);
+            var rayBLU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecLU), dirBack, 0.0, 0.3);
+            var rayBRU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecRU), dirBack, 0.0, 0.3);
 
-            var rayBMD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecD), dirBack, 0.15, 0.45);
-            var rayBLD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecLD), dirBack, 0.15, 0.45);
-            var rayBRD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecRD), dirBack, 0.15, 0.45);
+            var rayBMD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecD), dirBack, 0.0, 0.3);
+            var rayBLD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecLD), dirBack, 0.0, 0.3);
+            var rayBRD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecRD), dirBack, 0.0, 0.3);
 
             //LEFT
-            var rayLMU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecU), dirLeft, 0.15, 0.45);
-            var rayLFU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecFU), dirLeft, 0.15, 0.45);
-            var rayLBU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecBU), dirLeft, 0.15, 0.45);
+            var rayLMU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecU), dirLeft, 0.0, 0.3);
+            var rayLFU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecFU), dirLeft, 0.0, 0.3);
+            var rayLBU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecBU), dirLeft, 0.0, 0.3);
 
-            var rayLMD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecD), dirLeft, 0.15, 0.45);
-            var rayLFD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecFD), dirLeft, 0.15, 0.45);
-            var rayLBD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecBD), dirLeft, 0.15, 0.45);
+            var rayLMD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecD), dirLeft, 0.0, 0.3);
+            var rayLFD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecFD), dirLeft, 0.0, 0.3);
+            var rayLBD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecBD), dirLeft, 0.0, 0.3);
 
             //RIGHT
-            var rayRMU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecU), dirRight, 0.15, 0.45);
-            var rayRFU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecFU), dirRight, 0.15, 0.45);
-            var rayRBU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecBU), dirRight, 0.15, 0.45);
+            var rayRMU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecU), dirRight, 0.0, 0.3);
+            var rayRFU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecFU), dirRight, 0.0, 0.3);
+            var rayRBU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecBU), dirRight, 0.0, 0.3);
 
-            var rayRMD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecD), dirRight, 0.15, 0.45);
-            var rayRFD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecFD), dirRight, 0.15, 0.45);
-            var rayRBD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecBD), dirRight, 0.15, 0.45);
+            var rayRMD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecD), dirRight, 0.0, 0.3);
+            var rayRFD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecFD), dirRight, 0.0, 0.3);
+            var rayRBD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecBD), dirRight, 0.0, 0.3);
 
             
             //LIGHTS
@@ -452,20 +452,17 @@
                         
                         scene.add(tree0, tree1, tree2, tree3, tree4, tree5, tree6, tree7, tree8, tree9);
                         scene.add(th0, th1, th2, th3, th4, th5, th6, th7, th8, th9);
-                    });    
-						//scene.add(th0, th1, th2, th3, th4, th5, th6, th7, th8, th9);
-						//colObj.push(th0);
-						//colObj.push(th1);
-						//colObj.push(th2);
-						//colObj.push(th3);
-						//colObj.push(th4);
-						//colObj.push(th5);
-						//colObj.push(th6);
-						//colObj.push(th7);
-						//colObj.push(th8);
-						//colObj.push(th9);
-						//alert(colObj[1].position.x);
-                    
+						colObj.push(th0);
+						colObj.push(th1);
+						colObj.push(th2);
+						colObj.push(th3);
+						colObj.push(th4);
+						colObj.push(th5);
+						colObj.push(th6);
+						colObj.push(th7);
+						colObj.push(th8);
+						colObj.push(th9);
+                    });
                     
                 //PARTICLE SYSTEM
                 var particle_count = 50000;
@@ -524,6 +521,7 @@
 				keyUpdate();
 				rayUpdate();
 				//movement();
+				console.log(yawObject.position.x + ", " + yawObject.position.y + ", " + yawObject.position.z + "\n" + dirFront.x + ", " + dirFront.y + ", " + dirFront.z + "\n" + dirLeft.x + ", " + dirLeft.y + ", " + dirLeft.z);
 			}
 			
 			function keyUpdate () {
@@ -536,23 +534,34 @@
 			function rayUpdate() {
 				//VECTORS
 				var yAxis = new THREE.Vector3(0, 1, 0);
-				vecU.applyAxisAngle(yAxis, yawObject.rotation.y);
-				vecD.applyAxisAngle(yAxis, yawObject.rotation.y);
-				vecFU.applyAxisAngle(yAxis, yawObject.rotation.y);
-				vecFD.applyAxisAngle(yAxis, yawObject.rotation.y);
-				vecBU.applyAxisAngle(yAxis, yawObject.rotation.y);
-				vecBD.applyAxisAngle(yAxis, yawObject.rotation.y);
-				vecLU.applyAxisAngle(yAxis, yawObject.rotation.y);
-				vecLD.applyAxisAngle(yAxis, yawObject.rotation.y);
-				vecRU.applyAxisAngle(yAxis, yawObject.rotation.y);
-				vecRD.applyAxisAngle(yAxis, yawObject.rotation.y);
 				
-				dirFront.applyAxisAngle(yAxis, yawObject.rotation.y);
-				dirBack.applyAxisAngle(yAxis, yawObject.rotation.y);
-				dirLeft.applyAxisAngle(yAxis, yawObject.rotation.y);
-				dirRight.applyAxisAngle(yAxis, yawObject.rotation.y);
-				dirUp.applyAxisAngle(yAxis, yawObject.rotation.y);
-				dirDown.applyAxisAngle(yAxis, yawObject.rotation.y);
+				var tempFU = new THREE.Vector3(0, 0.3, -0.3).applyAxisAngle(yAxis, yawObject.rotation.y);
+				var tempFD = new THREE.Vector3(0, -0.3, -0.3).applyAxisAngle(yAxis, yawObject.rotation.y);
+				var tempBU = new THREE.Vector3(0, 0.3, 0.3).applyAxisAngle(yAxis, yawObject.rotation.y);
+				var tempBD = new THREE.Vector3(0, -0.3, 0.3).applyAxisAngle(yAxis, yawObject.rotation.y);
+				var tempLU = new THREE.Vector3(-0.3, 0.3, 0).applyAxisAngle(yAxis, yawObject.rotation.y);
+				var tempLD = new THREE.Vector3(-0.3, -0.3, 0).applyAxisAngle(yAxis, yawObject.rotation.y);
+				var tempRU = new THREE.Vector3(0.3, 0.3, 0).applyAxisAngle(yAxis, yawObject.rotation.y);
+				var tempRD = new THREE.Vector3(0.3, -0.3, 0).applyAxisAngle(yAxis, yawObject.rotation.y);
+				
+				vecFU = tempFU;
+				vecFD = tempFD;
+				vecBU = tempBU;
+				vecBD = tempBD;
+				vecLU = tempLU;
+				vecLD = tempLD;
+				vecRU = tempRU;
+				vecRD = tempRD;
+				
+				var tempFront = new THREE.Vector3(0, 0, -1).applyAxisAngle(yAxis, yawObject.rotation.y);
+				var tempLeft = new THREE.Vector3(-1, 0, 0).applyAxisAngle(yAxis, yawObject.rotation.y);
+				var tempBack = new THREE.Vector3(0, 0, 1).applyAxisAngle(yAxis, yawObject.rotation.y);
+				var tempRight = new THREE.Vector3(1, 0, 0).applyAxisAngle(yAxis, yawObject.rotation.y);
+				
+				dirFront = tempFront;
+				dirLeft = tempLeft;
+				dirBack = tempBack;
+				dirRight = tempRight;
 			
 				//FRONT
 				rayFMU.set(new THREE.Vector3().addVectors(yawObject.position, vecU), dirFront);
@@ -593,14 +602,14 @@
 			
 			//COLLSION
 			function checkCollision(ray1, ray2, ray3, ray4, ray5, ray6) {
-				rayUpdate();
+				//rayUpdate();
 				
-				var collide1 = ray1.intersectObjects(scene.children);
-				var collide2 = ray2.intersectObjects(scene.children);
-				var collide3 = ray3.intersectObjects(scene.children);
-				var collide4 = ray4.intersectObjects(scene.children);
-				var collide5 = ray5.intersectObjects(scene.children);
-				var collide6 = ray6.intersectObjects(scene.children);
+				var collide1 = ray1.intersectObjects(colObj);
+				var collide2 = ray2.intersectObjects(colObj);
+				var collide3 = ray3.intersectObjects(colObj);
+				var collide4 = ray4.intersectObjects(colObj);
+				var collide5 = ray5.intersectObjects(colObj);
+				var collide6 = ray6.intersectObjects(colObj);
 				
 				if ( collide1.length > 0 || collide2.length > 0 || collide3.length > 0 || collide4.length > 0 || collide5.length > 0 || collide6.length > 0) {
 					return true;
@@ -746,6 +755,8 @@
                     if(event.keyCode === 38 || event.keyCode === 87) {
                         if (checkCollision(rayFMU, rayFLU, rayFRU, rayFMD, rayFLD, rayFRD)) {
 							moveForward = false;
+							velocity.x = 0;
+							velocity.z = 0;
 						}
 						else {
 							moveForward = true;
@@ -756,6 +767,8 @@
                     if(event.keyCode === 37 || event.keyCode === 65) {
 						if (checkCollision(rayLMU, rayLFU, rayLBU, rayLMD, rayLFD, rayLBD)) {
 							moveLeft = false;
+							velocity.x = 0;
+							velocity.z = 0;
 						}
 						else {
 							moveLeft = true;
@@ -767,6 +780,8 @@
                     if(event.keyCode === 40 || event.keyCode === 83) {
 						if (checkCollision(rayBMU, rayBLU, rayBRU, rayBMD, rayBLD, rayBRD)) {
 							moveBackward = false;
+							velocity.x = 0;
+							velocity.z = 0;
 						}
 						else {
 							moveBackward = true;
@@ -777,16 +792,13 @@
                     if(event.keyCode === 39 || event.keyCode === 68) {
 						if (checkCollision(rayRMU, rayRFU, rayRBU, rayRMD, rayRFD, rayRBD)) {
 							moveRight = false;
+							velocity.x = 0;
+							velocity.z = 0;
 						}
 						else {
 							moveRight = true;
 							walksound.play();
 						}
-                    }
-                    
-					// strg (debug)
-                    if(event.keyCode === 17) {
-						alert(yawObject.position.x + ", " + yawObject.position.y + ", " + yawObject.position.z + "\n" + dirFront.x + ", " + dirFront.y + ", " + dirFront.z);
                     }
                 };
 
