@@ -66,14 +66,12 @@
             
             //SCENE
             var scene = new THREE.Scene();
-            scene.fog = new THREE.Fog("grey", 0, 30);
-            
+            scene.fog = new THREE.Fog("grey", 0, 30);            
             
             
             //CAMERA
             var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-            //camera.position.y = 1;
-            
+            //camera.position.y = 1;            
             
             
             //RENDERER
@@ -84,90 +82,89 @@
             renderer.shadowMapType = THREE.PCFSoftShadowMap;
             document.body.appendChild(renderer.domElement);
             
-            //NEW CONTROLS
-			var controlsEnabled = false;
+            
+            //CONTROLS
+            var controlsEnabled = false;
 
             var moveForward = false;
             var moveBackward = false;
             var moveLeft = false;
             var moveRight = false;
 			
-            // Orbit CONTROLS
-            controls = new THREE.OrbitControls(camera);
+            var keys = new Array( 128 );
+            var key_W = false;
+            var key_A = false;
+            var key_S = false;
+            var key_D = false;
+
+            for (var i = 0; i < keys.length; i++) {
+                    keys[i] = false;
+            }
+
+            window.addEventListener('keydown', keyPressed, false);
+            window.addEventListener('keyup', keyReleased, false);
+
+            var move = 0.1;
 			
-			var keys = new Array( 128 );
-			var key_W = false;
-			var key_A = false;
-			var key_S = false;
-			var key_D = false;
-			
-			for (var i = 0; i < keys.length; i++) {
-				keys[i] = false;
-			}
-			
-			window.addEventListener('keydown', keyPressed, false);
-			window.addEventListener('keyup', keyReleased, false);
-			
-			var move = 0.1;
-			
-			//COLLISION-RAYS
-				var colObj = [];
-			
-				//VECTORS
-				var vecU = new THREE.Vector3(0, 0.3, 0);
-				var vecD = new THREE.Vector3(0, -0.3, 0);
-				var vecFU = new THREE.Vector3(0, 0.3, -0.3);
-				var vecFD = new THREE.Vector3(0, -0.3, -0.3);
-				var vecBU = new THREE.Vector3(0, 0.3, 0.3);
-				var vecBD = new THREE.Vector3(0, -0.3, 0.3);
-				var vecLU = new THREE.Vector3(-0.3, 0.3, 0);
-				var vecLD = new THREE.Vector3(-0.3, -0.3, 0);
-				var vecRU = new THREE.Vector3(0.3, 0.3, 0);
-				var vecRD = new THREE.Vector3(0.3, -0.3, 0);
-				
-				var dirFront = new THREE.Vector3(0, 0, -1);
-				var dirBack = new THREE.Vector3(0, 0, 1);
-				var dirLeft = new THREE.Vector3(-1, 0, 0);
-				var dirRight = new THREE.Vector3(1, 0, 0);
-				var dirUp = new THREE.Vector3(0, 1, 0);
-				var dirDown = new THREE.Vector3(0, -1, 0);
-				
-				//FRONT
-				var rayFMU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecU), dirFront, 0.15, 0.45);
-				var rayFLU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecLU), dirFront, 0.15, 0.45);
-				var rayFRU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecRU), dirFront, 0.15, 0.45);
-				
-				var rayFMD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecD), dirFront, 0.15, 0.45);
-				var rayFLD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecLD), dirFront, 0.15, 0.45);
-				var rayFRD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecRD), dirFront, 0.15, 0.45);
-				
-				//BACK
-				var rayBMU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecU), dirBack, 0.15, 0.45);
-				var rayBLU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecLU), dirBack, 0.15, 0.45);
-				var rayBRU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecRU), dirBack, 0.15, 0.45);
-				
-				var rayBMD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecD), dirBack, 0.15, 0.45);
-				var rayBLD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecLD), dirBack, 0.15, 0.45);
-				var rayBRD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecRD), dirBack, 0.15, 0.45);
-				
-				//LEFT
-				var rayLMU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecU), dirLeft, 0.15, 0.45);
-				var rayLFU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecFU), dirLeft, 0.15, 0.45);
-				var rayLBU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecBU), dirLeft, 0.15, 0.45);
-				
-				var rayLMD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecD), dirLeft, 0.15, 0.45);
-				var rayLFD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecFD), dirLeft, 0.15, 0.45);
-				var rayLBD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecBD), dirLeft, 0.15, 0.45);
-				
-				//RIGHT
-				var rayRMU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecU), dirRight, 0.15, 0.45);
-				var rayRFU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecFU), dirRight, 0.15, 0.45);
-				var rayRBU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecBU), dirRight, 0.15, 0.45);
-				
-				var rayRMD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecD), dirRight, 0.15, 0.45);
-				var rayRFD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecFD), dirRight, 0.15, 0.45);
-				var rayRBD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecBD), dirRight, 0.15, 0.45);
-            
+                        
+            //COLLISION-RAYS
+            var colObj = [];
+
+            //VECTORS
+            var vecU = new THREE.Vector3(0, 0.3, 0);
+            var vecD = new THREE.Vector3(0, -0.3, 0);
+            var vecFU = new THREE.Vector3(0, 0.3, -0.3);
+            var vecFD = new THREE.Vector3(0, -0.3, -0.3);
+            var vecBU = new THREE.Vector3(0, 0.3, 0.3);
+            var vecBD = new THREE.Vector3(0, -0.3, 0.3);
+            var vecLU = new THREE.Vector3(-0.3, 0.3, 0);
+            var vecLD = new THREE.Vector3(-0.3, -0.3, 0);
+            var vecRU = new THREE.Vector3(0.3, 0.3, 0);
+            var vecRD = new THREE.Vector3(0.3, -0.3, 0);
+
+            var dirFront = new THREE.Vector3(0, 0, -1);
+            var dirBack = new THREE.Vector3(0, 0, 1);
+            var dirLeft = new THREE.Vector3(-1, 0, 0);
+            var dirRight = new THREE.Vector3(1, 0, 0);
+            var dirUp = new THREE.Vector3(0, 1, 0);
+            var dirDown = new THREE.Vector3(0, -1, 0);
+
+            //FRONT
+            var rayFMU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecU), dirFront, 0.15, 0.45);
+            var rayFLU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecLU), dirFront, 0.15, 0.45);
+            var rayFRU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecRU), dirFront, 0.15, 0.45);
+
+            var rayFMD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecD), dirFront, 0.15, 0.45);
+            var rayFLD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecLD), dirFront, 0.15, 0.45);
+            var rayFRD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecRD), dirFront, 0.15, 0.45);
+
+            //BACK
+            var rayBMU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecU), dirBack, 0.15, 0.45);
+            var rayBLU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecLU), dirBack, 0.15, 0.45);
+            var rayBRU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecRU), dirBack, 0.15, 0.45);
+
+            var rayBMD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecD), dirBack, 0.15, 0.45);
+            var rayBLD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecLD), dirBack, 0.15, 0.45);
+            var rayBRD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecRD), dirBack, 0.15, 0.45);
+
+            //LEFT
+            var rayLMU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecU), dirLeft, 0.15, 0.45);
+            var rayLFU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecFU), dirLeft, 0.15, 0.45);
+            var rayLBU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecBU), dirLeft, 0.15, 0.45);
+
+            var rayLMD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecD), dirLeft, 0.15, 0.45);
+            var rayLFD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecFD), dirLeft, 0.15, 0.45);
+            var rayLBD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecBD), dirLeft, 0.15, 0.45);
+
+            //RIGHT
+            var rayRMU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecU), dirRight, 0.15, 0.45);
+            var rayRFU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecFU), dirRight, 0.15, 0.45);
+            var rayRBU = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecBU), dirRight, 0.15, 0.45);
+
+            var rayRMD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecD), dirRight, 0.15, 0.45);
+            var rayRFD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecFD), dirRight, 0.15, 0.45);
+            var rayRBD = new THREE.Raycaster(new THREE.Vector3().addVectors(camera.position, vecBD), dirRight, 0.15, 0.45);
+
             
             //LIGHTS
                 //DIRECTIONAL LIGHT
@@ -175,7 +172,7 @@
                 directionalLight.position.set(40, 40, 40);
                 directionalLight.target.position.set(0, 0, 10);
                 directionalLight.castShadow = true;
-                directionalLight.shadowDarkness = 0.3;
+                directionalLight.shadowDarkness = 0.4;
 
                 directionalLight.shadowCameraNear = 0;
                 directionalLight.shadowCameraFar = 100;
@@ -225,18 +222,54 @@
             
                 //HOUSE          
                 var house_material = new THREE.MeshPhongMaterial({
-                                        map: THREE.ImageUtils.loadTexture("textures/house/wood.jpg"),
-                                        bumpMap: THREE.ImageUtils.loadTexture("textures/house/wood_DISP.jpg"),
-                                        bumpScale: 0.1,
-                                        side: THREE.DoubleSide
-                                        });
-
+                    map: THREE.ImageUtils.loadTexture("textures/house/wood.jpg"),
+                    bumpMap: THREE.ImageUtils.loadTexture("textures/house/wood_DISP.jpg"),
+                    bumpScale: 0.1,
+                    side: THREE.DoubleSide
+                });
                 var house = new THREE.Mesh(new THREE.BoxGeometry(10, 2.5, 8), house_material);
                 house.position.y = 1.25;
                 house.castShadow = true;
                 house.receiveShadow = true;
                 scene.add(house);
-				colObj.push(house);
+		colObj.push(house);
+                
+                    //DOOR
+                    var door_material = new THREE.MeshPhongMaterial({
+                        map: THREE.ImageUtils.loadTexture("textures/house/door.jpg"),
+                        bumpMap: THREE.ImageUtils.loadTexture("textures/house/door_DISP.jpg"),
+                        bumpScale: 0.1,
+                        side: THREE.DoubleSide
+                    });                    
+                    var door = new THREE.Mesh(new THREE.PlaneBufferGeometry(1.25, 2.25), door_material);
+                    door.position.set(-3.625, 1.125, 4);
+                    door.castShadow = true;
+                    door.receiveShadow = true;
+                    scene.add(door);
+                    
+                        //DOOR-LEFT
+                        var door_left_material = new THREE.MeshPhongMaterial({
+                            map: THREE.ImageUtils.loadTexture("textures/house/door_left.jpg"),
+                            bumpMap: THREE.ImageUtils.loadTexture("textures/house/door_left_DISP.jpg"),
+                            bumpScale: 0.1
+                        });
+                        var door_left = new THREE.Mesh(new THREE.PlaneBufferGeometry(0.75, 2.5), door_left_material);
+                        door_left.position.set(-4.625, 1.25, 4);
+                        door_left.castShadow = true;
+                        door_left.receiveShadow = true;
+                        scene.add(door_left);
+                        
+                        //DOOR-UP
+                        var door_up_material = new THREE.MeshPhongMaterial({
+                            map: THREE.ImageUtils.loadTexture("textures/house/door_up.jpg"),
+                            bumpMap: THREE.ImageUtils.loadTexture("textures/house/door_up_DISP.jpg"),
+                            bumpScale: 0.1
+                        });
+                        var door_up = new THREE.Mesh(new THREE.PlaneBufferGeometry(1.25, 0.25), door_up_material);
+                        door_up.position.set(-3.625, 2.375, 4);
+                        door_up.castShadow = true;
+                        door_up.receiveShadow = true;
+                        scene.add(door_up);
                     
                     //FLOOR
                     var floor = new THREE.Mesh(new THREE.PlaneBufferGeometry(10, 8), house_material);
@@ -259,7 +292,12 @@
                     roof_side_geometry.faces.push(new THREE.Face3(0,1,2));
                     roof_side_geometry.computeFaceNormals();
                     roof_side_geometry.faceVertexUvs[0].push([uvs[0], uvs[1], uvs[2]]);
-                    var roof_side_material = new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture("textures/house/wood.jpg"), bumpMap: THREE.ImageUtils.loadTexture("textures/house/wood_DISP.jpg"), bumpScale: 0.1, side: THREE.DoubleSide});
+                    var roof_side_material = new THREE.MeshPhongMaterial({
+                        map: THREE.ImageUtils.loadTexture("textures/house/wood.jpg"),
+                        bumpMap: THREE.ImageUtils.loadTexture("textures/house/wood_DISP.jpg"),
+                        bumpScale: 0.1,
+                        side: THREE.DoubleSide
+                    });
                     var side_left = new THREE.Mesh(roof_side_geometry, roof_side_material);
                     side_left.castShadow = true;
                     side_left.receiveShadow = true;
@@ -273,7 +311,14 @@
 
                     //ROOFTOP
                     var roof_top_geometry = new THREE.PlaneGeometry(11, 4.5);
-                    var roof_top_material = new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture("textures/house/roof.jpg"), bumpMap: THREE.ImageUtils.loadTexture("textures/house/roof_DISP.jpg"), bumpScale: 0.1, specularMap: THREE.ImageUtils.loadTexture("textures/house/roof_SPEC.jpg"), specular: new THREE.Color("grey"), side: THREE.DoubleSide});
+                    var roof_top_material = new THREE.MeshPhongMaterial({
+                        map: THREE.ImageUtils.loadTexture("textures/house/roof.jpg"),
+                        bumpMap: THREE.ImageUtils.loadTexture("textures/house/roof_DISP.jpg"),
+                        bumpScale: 0.1,
+                        specularMap: THREE.ImageUtils.loadTexture("textures/house/roof_SPEC.jpg"),
+                        specular: new THREE.Color("grey"),
+                        side: THREE.DoubleSide
+                    });
                     var roof_top_front = new THREE.Mesh(roof_top_geometry, roof_top_material);
                     roof_top_front.rotateX(-1.21);
                     roof_top_front.position.set(0, 3.26, 2.1);
@@ -302,7 +347,11 @@
                 //GROUND
                     //GRASS
                     var grass_geometry = new THREE.PlaneGeometry(5, 5);
-                    var grass_material = new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture("textures/ground/grass.jpg"), bumpMap: THREE.ImageUtils.loadTexture("textures/ground/grass_DISP.jpg"), bumpScale: 0.1});                                                        
+                    var grass_material = new THREE.MeshPhongMaterial({
+                        map: THREE.ImageUtils.loadTexture("textures/ground/grass.jpg"),
+                        bumpMap: THREE.ImageUtils.loadTexture("textures/ground/grass_DISP.jpg"),
+                        bumpScale: 0.1
+                    });                                                        
                     var grass_array = [];
                     var x = -25;
                     var z = -25;
@@ -322,7 +371,11 @@
                     //TREES                  
                     var loader = new THREE.JSONLoader();
                     loader.load("models/tree.json", function(geometry){
-                        var material = new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture("textures/ground/bark.jpg"), bumpMap: THREE.ImageUtils.loadTexture("textures/ground/bark_DISP.jpg"), bumpScale: 0.1});
+                        var material = new THREE.MeshPhongMaterial({
+                            map: THREE.ImageUtils.loadTexture("textures/ground/bark.jpg"),
+                            bumpMap: THREE.ImageUtils.loadTexture("textures/ground/bark_DISP.jpg"),
+                            bumpScale: 0.1
+                        });
                         
                         var thg = new THREE.BoxGeometry(0.3, 4, 0.3);
                         var thm = new THREE.MeshBasicMaterial({color: "black"});
@@ -417,7 +470,11 @@
                 //PARTICLE SYSTEM
                 var particle_count = 50000;
                 var particles = new THREE.Geometry();
-                particle_material = new THREE.PointCloudMaterial({map: THREE.ImageUtils.loadTexture("textures/particles/rain.png"), size: 0.1, alphaTest: 0.1});
+                var particle_material = new THREE.PointCloudMaterial({
+                    map: THREE.ImageUtils.loadTexture("textures/particles/rain.png"),
+                    size: 0.1,
+                    alphaTest: 0.1
+                });
                 
                 for(var p = 0; p < particle_count; p++){
                     var x = Math.random() * 60 - 30;
