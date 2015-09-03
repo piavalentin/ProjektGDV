@@ -21,13 +21,14 @@
                 position: absolute;
                 width: 100%;
                 height: 100%;
-                background-color: transparent;
+                background-color:transparent;
+               
             }
             
             #anleitung{   
                 position: absolute;
-                margin-top: 10%;
-                margin-left: 10%;
+                margin-top: 2%;
+                margin-left: 20%;
                 background-color: transparent;
                 font-size: 40px;
                 font-family: Helvetica;
@@ -47,12 +48,10 @@
         <div id="blockscreen">
             <div id="anleitung">
                 <center>
-                    <img src="logo/paranormal.png" alt="Paranormal"><br><br>
-                <p> HEY VOLL TOLL ICH HAB DIE STEUERUNG HINBEKOMMEN! </p>
-                Start per Klick, <br>WASD/Arrow-Keys für die Steuerung, ESC: "Pause"
+                    <img src="logo/SUPER8fog.png" alt="Super 8"><br><br>
+                <p> WASD/Arrow-Keys für die Steuerung, ESC: "Pause"
                 <br> Maus: Drehen/ Look Around.
-                <p> Küsschen. PS: bisher nur Firefox kompatibel <br>
-                    PS: OrbitControls funktionieren nicht mehr</p>
+               
                 </center>
             </div>
         </div>
@@ -750,20 +749,21 @@
                 }, false);
             } 
             else{
-                anleitung.innerHTML = 'Bist du uncool. <br>Your browser doesn\'t seem to support Pointer Lock API<br>Einfach in Firefox öffnen';
+                anleitung.innerHTML = 'Oh wie uncool. <br>Dein Browser unterstützt Pointer Lock API nicht.<br>Probier es mal mit Firefox.<br>Oder wenn es sein muss mit Chrome.';
             }
             
             
            
 
             var prevTime = performance.now();
-            var velocity = new THREE.Vector3();
+            var tempo = new THREE.Vector3();
             
             var walksound = new Audio('sounds/walk.mp3');
             
 
             checkKeys();
             animate();
+            
             
             function checkKeys(event){
             // Key-Numbers: http://help.adobe.com/en_US/AS2LCR/Flash_10.0/help.html?content=00000520.html
@@ -773,8 +773,8 @@
                     if(event.keyCode === 38 || event.keyCode === 87) {
                         if (checkCollision(rayFMU, rayFLU, rayFRU, rayFMD, rayFLD, rayFRD)) {
 							moveForward = false;
-							velocity.x = 0;
-							velocity.z = 0;
+							tempo.x = 0;
+							tempo.z = 0;
 						}
 						else {
 							moveForward = true;
@@ -785,8 +785,8 @@
                     if(event.keyCode === 37 || event.keyCode === 65) {
 						if (checkCollision(rayLMU, rayLFU, rayLBU, rayLMD, rayLFD, rayLBD)) {
 							moveLeft = false;
-							velocity.x = 0;
-							velocity.z = 0;
+							tempo.x = 0;
+							tempo.z = 0;
 						}
 						else {
 							moveLeft = true;
@@ -798,8 +798,8 @@
                     if(event.keyCode === 40 || event.keyCode === 83) {
 						if (checkCollision(rayBMU, rayBLU, rayBRU, rayBMD, rayBLD, rayBRD)) {
 							moveBackward = false;
-							velocity.x = 0;
-							velocity.z = 0;
+							tempo.x = 0;
+							tempo.z = 0;
 						}
 						else {
 							moveBackward = true;
@@ -810,8 +810,8 @@
                     if(event.keyCode === 39 || event.keyCode === 68) {
 						if (checkCollision(rayRMU, rayRFU, rayRBU, rayRMD, rayRFD, rayRBD)) {
 							moveRight = false;
-							velocity.x = 0;
-							velocity.z = 0;
+							tempo.x = 0;
+							tempo.z = 0;
 						}
 						else {
 							moveRight = true;
@@ -855,18 +855,18 @@
                 var time = performance.now();
                 var delta = (time - prevTime) / 1000;
                 
-                velocity.x -= velocity.x * 10.0 * delta;
-                velocity.z -= velocity.z * 10.0 * delta;
+                tempo.x -= tempo.x * 10.0 * delta;
+                tempo.z -= tempo.z * 10.0 * delta;
 
-                if(moveForward) velocity.z -= 25.0 * delta;
-                if(moveBackward) velocity.z += 25.0 * delta;
+                if(moveForward) tempo.z -= 25.0 * delta;
+                if(moveBackward) tempo.z += 25.0 * delta;
 
-                if(moveLeft) velocity.x -= 25.0 * delta;
-                if(moveRight) velocity.x += 25.0 * delta;
+                if(moveLeft) tempo.x -= 25.0 * delta;
+                if(moveRight) tempo.x += 25.0 * delta;
 
 
-                controls.getObject().translateX( velocity.x * delta );
-                controls.getObject().translateZ( velocity.z * delta );
+                controls.getObject().translateX( tempo.x * delta );
+                controls.getObject().translateZ( tempo.z * delta );
                 prevTime = time;
 
 			}
