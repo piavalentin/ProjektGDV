@@ -21,3 +21,9 @@ http://www.google.de/imgres?imgurl=http%3A%2F%2Fwww.publicdomainpictures.net%2Fd
 
 door:
 http://mystaridea.com/i/2015/04/classy-color-wood-garage-door-idea-dark-brown-varnish-color-finished-minimalist-panel-classy-wood-garage-door-wood-garage-door-texture-exterior-elegant-artistic-choice-of-wood-garage-door-texture-des.jpg
+
+stone/smokestack:
+http://www.highresolutiontextures.com/textures/stones/hrt-stone-texture-3.jpg
+
+smoke:
+http://justinpille.com/WebGLBook-master/images/smoke-2.png
