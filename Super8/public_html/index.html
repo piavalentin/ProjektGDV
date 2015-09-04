@@ -70,7 +70,7 @@
             
             
             //RENDERER
-            var renderer = new THREE.WebGLRenderer({antialias: false});
+            var renderer = new THREE.WebGLRenderer({antialias: false}); //true
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.shadowMapEnabled = true;
             renderer.shadowMapSoft = true;
@@ -359,15 +359,31 @@
                         specular: new THREE.Color("grey")
                     });
                     var smokestack = new THREE.Mesh(new THREE.BoxGeometry(0.5, 4, 0.5), smokestack_material);
-                    smokestack.position.set(-3.4, 3.5, -3.4);
+                    smokestack.position.set(-3.4, 3.125, -3.4);
                     scene.add(smokestack);
                     
+                    //FIREPLACE
+                    var loader = new THREE.JSONLoader();
+                    loader.load("models/fireplace.json", function(geometry){
+                        var material = new THREE.MeshPhongMaterial({
+                            map: THREE.ImageUtils.loadTexture("textures/house/smokestack.jpg"),
+                            bumpMap: THREE.ImageUtils.loadTexture("textures/house/smokestack_DISP.jpg"),
+                            bumpScale: 0.1,
+                            specularMap: THREE.ImageUtils.loadTexture("textures/house/smokestack_SPEC.jpg"),
+                            specular: new THREE.Color("grey")
+                        });
+                        var fire_place = new THREE.Mesh(geometry, material);
+                        fire_place.rotateY(-Math.PI/2);
+                        fire_place.position.set(-3.4, 0.6, -3.3);
+                        scene.add(fire_place);
+                    });
+                    
                     //MIRROR
-                    var mirror_camera = new THREE.CubeCamera(0.1, 15, 1024);
-                    mirror_camera.position.set(-3, 1, -3.9);
+                    var mirror_camera = new THREE.CubeCamera(0.1, 15, 128); //1024
+                    mirror_camera.position.set(0, 1.5, -3.99);
                     scene.add(mirror_camera);
                     
-                    var mirror = new THREE.Mesh(new THREE.PlaneBufferGeometry(1, 1), new THREE.MeshPhongMaterial({envMap: mirror_camera.renderTarget}));
+                    var mirror = new THREE.Mesh(new THREE.PlaneBufferGeometry(1, 1.2), new THREE.MeshPhongMaterial({envMap: mirror_camera.renderTarget}));
                     mirror.position.set(0, 1.5, -3.99);
                     scene.add(mirror);
 
@@ -397,7 +413,6 @@
                     }
                     
                     //TREES                  
-                    var loader = new THREE.JSONLoader();
                     loader.load("models/tree.json", function(geometry){
                         var material = new THREE.MeshPhongMaterial({
                             map: THREE.ImageUtils.loadTexture("textures/ground/bark.jpg"),
