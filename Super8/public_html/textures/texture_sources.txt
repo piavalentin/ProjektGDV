@@ -27,3 +27,6 @@ http://www.highresolutiontextures.com/textures/stones/hrt-stone-texture-3.jpg
 
 smoke:
 http://justinpille.com/WebGLBook-master/images/smoke-2.png
+
+fire:
+http://wrathgames.com/blog/2012/01/11/fire-animation-loop/
