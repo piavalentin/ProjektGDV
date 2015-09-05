@@ -166,7 +166,6 @@
                 //DIRECTIONAL LIGHT
                 var directionalLight = new THREE.DirectionalLight("white", 0.1);
                 directionalLight.position.set(40, 40, 40);
-                directionalLight.target.position.set(0, 0, 10);
                 directionalLight.castShadow = true;
                 directionalLight.shadowDarkness = 0.4;
 
@@ -187,16 +186,20 @@
                 scene.add(ambientLight);
                 
                 //SPOT LIGHT
-                var spotLight = new THREE.SpotLight("blue", 1);
-                spotLight.target.position.set(0, 0.5, 0.5);
-                spotLight.position.set(4.5, 0.8, 3.5);
-                spotLight.shadowCameraVisible = true;
-                spotLight.castShadow = true;
-                spotLight.shadowDarkness = 0.5;
-                spotLight.shadowCameraFov = 25;               
-                spotLight.shadowCameraNear = 0.1;
-                spotLight.shadowCameraFar = 8;
-                scene.add(spotLight);
+                var spotLight_tv = new THREE.SpotLight("blue", 1);
+                spotLight_tv.position.set(4.5, 0.8, 3.5);
+                spotLight_tv.shadowCameraVisible = false;
+                spotLight_tv.castShadow = true;
+                spotLight_tv.shadowDarkness = 0.5;
+                spotLight_tv.shadowCameraFov = 25;               
+                spotLight_tv.shadowCameraNear = 0.1;
+                spotLight_tv.shadowCameraFar = 8;
+                scene.add(spotLight_tv);
+                    
+                //POINT LIGHT
+                var pointLight_fire = new THREE.PointLight("yellow", 1, 3);
+                pointLight_fire.position.set(-3.4, 0.6, -3);
+                scene.add(pointLight_fire);
 
 
             //GEOMETRY
@@ -630,7 +633,7 @@
                 image_counter++;
             } 
             
-            function render(){                
+            function render(){                  
                 //MIRROR CUBECAMERA UPDATE
                 mirror.visible = false;
                 mirror_camera.updateCubeMap(renderer, scene);
