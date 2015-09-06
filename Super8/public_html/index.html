@@ -97,7 +97,6 @@
             var key_A = false;
             var key_S = false;
             var key_D = false;
-            var key_Q = false;
             var key_E = false;
 
             for (var i = 0; i < keys.length; i++) {
@@ -603,9 +602,9 @@
                         rain_particles.vertices[i].y = Math.random() * 10 + 8;
                     }
                     rain_particles.vertices[i].y -= 1;
-					if ((rain_particles.vertices[i].x < 5.1) && (rain_particles.vertices[i].x > -5.1) && (rain_particles.vertices[i].z < 4.1) && (rain_particles.vertices[i].z > -4.1) && (rain_particles.vertices[i].y < 4.1)) {
-						rain_particles.vertices[i].y = -1;
-					}
+                    if ((rain_particles.vertices[i].x < 5.1) && (rain_particles.vertices[i].x > -5.1) && (rain_particles.vertices[i].z < 4.1) && (rain_particles.vertices[i].z > -4.1) && (rain_particles.vertices[i].y < 4.1)) {
+                            rain_particles.vertices[i].y = -1;
+                    }
                 }         
                 
                 for(var j = 0; j < smoke_particles.vertices.length; j++){
@@ -634,7 +633,7 @@
                     );
                 }
                 image_counter++;
-            } 
+            }
             
             function render(){                  
                 //MIRROR CUBECAMERA UPDATE
@@ -656,11 +655,7 @@
 
 				update();
 				
-                requestAnimationFrame(render);
-                
-                //UPDATE POSITIONS
-                spotLight.target.updateMatrixWorld();
-                
+                requestAnimationFrame(render);                
             }
             
 			//UPDATE
@@ -676,8 +671,7 @@
 				key_A = keys[65];
 				key_S = keys[83];
 				key_D = keys[68];
-                key_Q = keys[81];
-                key_E = keys[69];
+                                key_E = keys[69];
 			}
 			
 			function rayUpdate() {
