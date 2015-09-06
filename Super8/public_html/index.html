@@ -78,7 +78,12 @@
             renderer.shadowMapType = THREE.PCFSoftShadowMap;
             document.body.appendChild(renderer.domElement);
             
-            
+            //LOGIC
+			//DOOR
+			var eventObj = [];
+			var open = false;
+			var reset_E = true;
+			
             //CONTROLS
             var controlsEnabled = false;
 
@@ -231,7 +236,7 @@
                 right.castShadow = true;
                 right.receiveShadow = true;
                 scene.add(front, back, left, right);
-		colObj.push(front, back, left, right);
+				colObj.push(front, back, left, right);
                 
                     //DOOR
                     var door_material = new THREE.MeshPhongMaterial({
@@ -598,6 +603,9 @@
                         rain_particles.vertices[i].y = Math.random() * 10 + 8;
                     }
                     rain_particles.vertices[i].y -= 1;
+					if ((rain_particles.vertices[i].x < 5.1) && (rain_particles.vertices[i].x > -5.1) && (rain_particles.vertices[i].z < 4.1) && (rain_particles.vertices[i].z > -4.1) && (rain_particles.vertices[i].y < 4.1)) {
+						rain_particles.vertices[i].y = -1;
+					}
                 }         
                 
                 for(var j = 0; j < smoke_particles.vertices.length; j++){
@@ -633,14 +641,6 @@
                 mirror.visible = false;
                 mirror_camera.updateCubeMap(renderer, scene);
                 mirror.visible = true;
-                
-                //DOOR
-                if(key_E){
-                    pivot.rotation.y = 0;
-                }
-                if(key_Q){
-                    pivot.rotation.y = -Math.PI/2;
-                }
 				
                 //PARTICLE SYSTEM
                 updateParticleSystem();
@@ -676,8 +676,8 @@
 				key_A = keys[65];
 				key_S = keys[83];
 				key_D = keys[68];
-                                key_Q = keys[81];
-                                key_E = keys[69];
+                key_Q = keys[81];
+                key_E = keys[69];
 			}
 			
 			function rayUpdate() {
@@ -900,6 +900,23 @@
 						moveRight = true;
 						walksound.play();
                     }
+					// e
+					if(event.keyCode === 69) {
+						if(reset_E) {
+							reset_E = false;
+							if(open) {
+								pivot.rotation.y = 0;
+								open = false;
+							}
+							else {
+								pivot.rotation.y = -Math.PI/2;
+								open = true;
+							}
+						}
+					}
+					//if(key_Q){
+						//    pivot.rotation.y = -Math.PI/2;
+						//}
                 };
 
                 var onKeyUp = function(event){
@@ -923,6 +940,10 @@
                         moveRight = false;
                         walksound.pause();
                     }
+					// e
+					if(event.keyCode === 69) {
+						reset_E = true;
+					}
                 };
 
             document.addEventListener('keydown', onKeyDown, false);
