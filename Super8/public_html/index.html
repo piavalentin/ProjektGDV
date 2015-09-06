@@ -92,6 +92,8 @@
             var key_A = false;
             var key_S = false;
             var key_D = false;
+            var key_Q = false;
+            var key_E = false;
 
             for (var i = 0; i < keys.length; i++) {
                     keys[i] = false;
@@ -239,7 +241,8 @@
                         side: THREE.DoubleSide
                     });                    
                     var door = new THREE.Mesh(new THREE.PlaneBufferGeometry(1.25, 2.25), door_material);
-                    door.position.set(-3.625, 1.125, 4);
+                    //door.position.set(-3.625, 1.125, 4);
+                    door.position.x = -0.625;
                     door.castShadow = true;
                     door.receiveShadow = true;
                     scene.add(door);
@@ -270,6 +273,12 @@
                         door_up.receiveShadow = true;
                         scene.add(door_up);
                         colObj.push(door, door_left, door_up);
+                        
+                        //PIVOT
+                        var pivot = new THREE.Object3D();
+                        pivot.position.set(-3, 1.125, 4);
+                        pivot.add(door);
+                        scene.add(pivot);
                     
                     //FLOOR
                     var floor = new THREE.Mesh(new THREE.PlaneBufferGeometry(10, 8), house_material);
@@ -624,6 +633,14 @@
                 mirror.visible = false;
                 mirror_camera.updateCubeMap(renderer, scene);
                 mirror.visible = true;
+                
+                //DOOR
+                if(key_E){
+                    pivot.rotation.y = 0;
+                }
+                if(key_Q){
+                    pivot.rotation.y = -Math.PI/2;
+                }
 				
                 //PARTICLE SYSTEM
                 updateParticleSystem();
@@ -659,6 +676,8 @@
 				key_A = keys[65];
 				key_S = keys[83];
 				key_D = keys[68];
+                                key_Q = keys[81];
+                                key_E = keys[69];
 			}
 			
 			function rayUpdate() {
