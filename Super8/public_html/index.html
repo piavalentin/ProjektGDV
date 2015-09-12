@@ -77,12 +77,10 @@
             renderer.shadowMapSoft = true;
             renderer.shadowMapType = THREE.PCFSoftShadowMap;
             document.body.appendChild(renderer.domElement);
-            
-            //LOGIC
+			
 			//DOOR
-			var eventObj = [];
 			var open = false;
-			var reset_E = true;
+			var doorAnim = false;
 			
             //CONTROLS
             var controlsEnabled = false;
@@ -108,7 +106,13 @@
 
             var move = 0.1;
 			
-                        
+			//LOGIC
+			var reset_E = true;
+			
+			var intObj = [];
+			var eventObj = [];
+			var intVisibility = [];
+			
             //COLLISION-RAYS
             var colObj = [];
 
@@ -147,7 +151,13 @@
             var rayRU = new THREE.Raycaster(yawObject.position, dirR, 0.05, 0.3);
 			var rayRD = new THREE.Raycaster(new THREE.Vector3().addVectors(yawObject.position, vecD), dirR, 0.05, 0.3);
 
-            
+            //INTERACTION
+			var intVec = new THREE.Vector3(0, 0, -1);
+			var intRay = new THREE.Raycaster(yawObject.position, intVec, 0.05, 2);
+			
+			var intersectInt = intRay.intersectObjects(intObj);
+			var intersectVisible = intRay.intersectObjects(intVisibility);
+			
             //LIGHTS
                 //DIRECTIONAL LIGHT
                 var directionalLight = new THREE.DirectionalLight("white", 0.1);
@@ -250,6 +260,20 @@
                     door.castShadow = true;
                     door.receiveShadow = true;
                     scene.add(door);
+					intObj.push(door);
+					
+					var doorInt_material = new THREE.MeshBasicMaterial({
+                        color : "blue",
+						transparent : true,
+						opacity : 0.2
+                    });
+					var doorInt_geometry = new THREE.BoxGeometry(1.25, 2.25, 0.1);
+					var doorInt = new THREE.Mesh(doorInt_geometry, doorInt_material);
+					doorInt.scale = 1.1;
+					doorInt.visible = false;
+					doorInt.position.x = -0.625;
+					scene.add(doorInt);
+					intVisibility.push(doorInt);
                     
                         //DOOR-LEFT
                         var door_left_material = new THREE.MeshPhongMaterial({
@@ -282,6 +306,7 @@
                         var pivot = new THREE.Object3D();
                         pivot.position.set(-3, 1.125, 4);
                         pivot.add(door);
+						pivot.add(doorInt);
                         scene.add(pivot);
                     
                     //FLOOR
@@ -662,6 +687,7 @@
 			function update() {
 				keyUpdate();
 				rayUpdate();
+				checkInteraction();
 				//movement();
 				console.log(yawObject.position.x + ", " + yawObject.position.y + ", " + yawObject.position.z + "\n" + dirF.x + ", " + dirF.y + ", " + dirF.z + "\n" + dirL.x + ", " + dirL.y + ", " + dirL.z);
 			}
@@ -671,12 +697,14 @@
 				key_A = keys[65];
 				key_S = keys[83];
 				key_D = keys[68];
-                                key_E = keys[69];
+                key_E = keys[69];
 			}
 			
 			function rayUpdate() {
+				//COLLISION
 				//VECTORS
 				var yAxis = new THREE.Vector3(0, 1, 0);
+				var xAxis = new THREE.Vector3(1, 0, 0);
 				
 				var tempF = new THREE.Vector3(0, 0, -1).applyAxisAngle(yAxis, yawObject.rotation.y);
 				var tempL = new THREE.Vector3(-1, 0, 0).applyAxisAngle(yAxis, yawObject.rotation.y);
@@ -719,6 +747,14 @@
 				//RIGHT
 				rayRU.set(yawObject.position, dirR);
 				rayRD.set(new THREE.Vector3().addVectors(yawObject.position, vecD), dirR);
+				
+				//INTERACTION
+				var tempInt = new THREE.Vector3(0, 0, -1);
+				tempInt.applyAxisAngle(yAxis, yawObject.rotation.y);
+				tempInt.applyAxisAngle(xAxis, yawObject.rotation.x);
+				intVec = tempInt;
+				
+				intRay.set(yawObject.position, intVec);
 			}
 			
 			//COLLSION
@@ -737,6 +773,26 @@
 				}
 				else {
 					return false;
+				}
+			}
+			
+			//INTERACTION
+			function checkInteraction() {
+				for(var i = 0; i < intVisibility.length; i++) {
+					intVisibility[i].visible = false;
+				}
+			
+				intersectInt = intRay.intersectObjects(intObj);
+				intersectVisible = intRay.intersectObjects(intVisibility);
+				if(intersectVisible.length > 0) {
+					intersectVisible[0].object.visible = true;
+				}
+			}
+			
+			function interact() {
+				
+				if(intersectInt[0].object === door) {
+					doorAnim = true;
 				}
 			}
 
@@ -855,9 +911,6 @@
             else{
                 anleitung.innerHTML = 'Oh wie uncool. <br>Dein Browser unterstützt Pointer Lock API nicht.<br>Probier es mal mit Firefox.<br>Oder wenn es sein muss mit Chrome.';
             }
-            
-            
-           
 
             var prevTime = performance.now();
             var tempo = new THREE.Vector3();
@@ -898,13 +951,8 @@
 					if(event.keyCode === 69) {
 						if(reset_E) {
 							reset_E = false;
-							if(open) {
-								pivot.rotation.y = 0;
-								open = false;
-							}
-							else {
-								pivot.rotation.y = -Math.PI/2;
-								open = true;
+							if(intersectInt.length > 0) {
+								interact();
 							}
 						}
 					}
@@ -992,6 +1040,27 @@
                 controls.getObject().translateZ( tempo.z * delta );
                 prevTime = time;
 
+			}
+			
+			if(doorAnim) {
+				if(open) {
+					pivot.rotation.y += (Math.PI/2) / 60;
+					
+					if(pivot.rotation.y >= 0) {
+						pivot.rotation.y = 0;
+						doorAnim = false;
+						open = false;
+					}
+				}
+				else {
+					pivot.rotation.y -= (Math.PI/2) / 60;
+					
+					if(pivot.rotation.y <= -Math.PI/2) {
+						pivot.rotation.y = -Math.PI/2;
+						doorAnim = false;
+						open = true;
+					}
+				}
 			}
         }
         render();
