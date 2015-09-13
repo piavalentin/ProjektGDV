@@ -121,7 +121,7 @@
             var dirFR = new THREE.Vector3(1, 0, 1);
             var dirBL = new THREE.Vector3(-1, 0, 1);
             var dirBR = new THREE.Vector3(1, 0, 1);
-			var vecD = new THREE.Vector3(0, -1, 0);
+            var vecD = new THREE.Vector3(0, -1, 0);
 			
             //FRONT
             var rayFU = new THREE.Raycaster(yawObject.position, dirF, 0.05, 0.3);
@@ -181,10 +181,20 @@
                 spotLight_tv.shadowCameraNear = 0.1;
                 spotLight_tv.shadowCameraFar = 8;
                 scene.add(spotLight_tv);
+                
+                var point = new THREE.SpotLight("white", 1);
+                point.position.set(0, 3, 0);
+                point.shadowCameraVisible = true;
+                point.castShadow = true;
+                point.shadowDarkness = 0.5;
+                point.shadowCameraFov = 15;
+                point.shadowCameraNear = 0.1;
+                point.shadowCameraFar = 3.01;
+                scene.add(point);
                     
                 //POINT LIGHT
                 var pointLight_fire = new THREE.PointLight("yellow", 1, 3);
-                pointLight_fire.position.set(-3.4, 0.6, -3);
+                pointLight_fire.position.set(-3.4, 0.6, -2.8);
                 scene.add(pointLight_fire);
 
 
@@ -245,7 +255,6 @@
                         side: THREE.DoubleSide
                     });                    
                     var door = new THREE.Mesh(new THREE.PlaneBufferGeometry(1.25, 2.25), door_material);
-                    //door.position.set(-3.625, 1.125, 4);
                     door.position.x = -0.625;
                     door.castShadow = true;
                     door.receiveShadow = true;
@@ -374,12 +383,12 @@
                         fire_place.rotateY(-Math.PI/2);
                         fire_place.position.set(-3.4, 0.6, -3.3);
                         scene.add(fire_place);
-						var m = new THREE.MeshBasicMaterial({color: "black"});
-						var g = new THREE.BoxGeometry(2, 2, 0.8);
-						var h = new THREE.Mesh(g, m);
-						h.position.set(-3.4, 1, -3.5);
-						h.visible = false;
-						scene.add(h);
+                        var m = new THREE.MeshBasicMaterial({color: "black"});
+                        var g = new THREE.BoxGeometry(2, 2, 0.8);
+                        var h = new THREE.Mesh(g, m);
+                        h.position.set(-3.4, 1, -3.5);
+                        h.visible = false;
+                        scene.add(h);
                         colObj.push(h);
                     });
                     
@@ -430,7 +439,16 @@
                     }));
                     screen.rotateY(-2.18);
                     screen.position.set(4.1, 1, 3.125);
-                    scene.add(screen);           
+                    scene.add(screen);    
+                    
+                    //LAMP
+                    loader.load("models/lamp.json", function(geometry){
+                        var material = new THREE.MeshPhongMaterial({color: "white", side: THREE.DoubleSide});
+                        var lamp = new THREE.Mesh(geometry, material);
+                        lamp.position.set(0, 3, 0);
+                        scene.add(lamp);
+                        point.add(lamp);
+                    });
 
 
                 //GROUND
@@ -640,7 +658,7 @@
                 mirror.visible = false;
                 mirror_camera.updateCubeMap(renderer, scene);
                 mirror.visible = true;
-				
+        
                 //PARTICLE SYSTEM
                 updateParticleSystem();
                 
@@ -899,18 +917,15 @@
 						if(reset_E) {
 							reset_E = false;
 							if(open) {
-								pivot.rotation.y = 0;
-								open = false;
+                                                            pivot.rotation.y = 0;
+                                                            open = false;
 							}
-							else {
-								pivot.rotation.y = -Math.PI/2;
-								open = true;
+							else {                                                            
+                                                            pivot.rotation.y = -Math.PI/2;
+                                                            open = true;
 							}
 						}
 					}
-					//if(key_Q){
-						//    pivot.rotation.y = -Math.PI/2;
-						//}
                 };
 
                 var onKeyUp = function(event){
