@@ -30,3 +30,9 @@ http://justinpille.com/WebGLBook-master/images/smoke-2.png
 
 fire:
 http://wrathgames.com/blog/2012/01/11/fire-animation-loop/
+
+fence:
+http://www.yourinformationhub.com/wp-content/uploads/2013/09/8847390_xl.jpg
+
+hassock:
+http://dc461.4shared.com/img/Smh8OtVL/s3/136faa57850/grass__7_
