@@ -419,6 +419,8 @@
                         var fire_place = new THREE.Mesh(geometry, material);
                         fire_place.rotateY(-Math.PI/2);
                         fire_place.position.set(-3.4, 0.6, -3.3);
+                        fire_place.receiveShadow = true;
+                        fire_place.castShadow = true;
                         scene.add(fire_place);
 						var m = new THREE.MeshBasicMaterial({color: "black"});
 						var g = new THREE.BoxGeometry(2, 2, 0.8);
@@ -525,6 +527,7 @@
                                                 couch = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial(materials));
                                                 couch.receiveShadow = true;
                                                 couch.castShadow = true;
+                                                couch.rotateY(Math.PI/4);
 						scene.add(couch);
 						colObj.push(couch);
 					});
@@ -621,19 +624,24 @@
                     hassock2.rotateY(Math.PI/2);
                     scene.add(hassock, hassock2);
                     
-//                    var hassock_array = [60];
-//                    for(var i = 0; i < hassock_array.length/2 - 1; i++){
-//                        var j = i + 1;
-//                        
-//                        hassock_array[i] = new THREE.Mesh(hassock_geometry, hassock_material);
-//                        hassock_array[i].position.set();
-//                        
-//                        hassock_array[j] = new THREE.Mesh(hassock_geometry, hassock_material);
-//                        hassock_array[j].position.set();
-//                        hassock_array[j].rotateY(Math.PI/2);
-//                        
-//                        scene.add(hassock_array[i], hassock_array[j]);
-//                    }
+                    var hassock_array = [100];
+                    for(var i = 0; i < 49; i++){
+                        var j = i + 1;
+                        do{
+                            var x = Math.random() * 48 - 24;
+                            var y = 0.5;
+                            var z = Math.random() * 60 - 20;
+                        }while((x > -5.1) && (x < 5.1) || (z > -4.1) && (z < 4.1));
+                        
+                        hassock_array[i] = new THREE.Mesh(hassock_geometry, hassock_material);
+                        hassock_array[i].position.set(x, y, z);
+                        
+                        hassock_array[j] = new THREE.Mesh(hassock_geometry, hassock_material);
+                        hassock_array[j].position.set(x, y, z);
+                        hassock_array[j].rotateY(Math.PI/2);
+                        
+                        scene.add(hassock_array[i], hassock_array[j]);
+                    }
                     
                     //FENCE
                     var a = -22.5;
