@@ -153,25 +153,25 @@
 			var rayRD = new THREE.Raycaster(new THREE.Vector3().addVectors(yawObject.position, vecD), dirR, 0.05, 0.3);
 
             //INTERACTION
-			var intVec = new THREE.Vector3(0, 0, -1);
-			var intRay = new THREE.Raycaster(yawObject.position, intVec, 0.05, 2);
-			
-			var intersectInt = intRay.intersectObjects(intObj);
-			var intersectVisible = intRay.intersectObjects(intVisibility);
-			
-			//EVENTS
-			var eventRay = new THREE.Raycaster(yawObject.position, vecD, 1, 3);
-			var intersectEvent = eventRay.intersectObjects(eventObj);
-			
-			var eventMat = new THREE.MeshBasicMaterial({color : "red"});
-			var eventGeo = new THREE.PlaneBufferGeometry(1, 1);
-			
-			var event_door = new THREE.Mesh(eventGeo, eventMat);
-			event_door.scale.set(5, 5, 1);
-			event_door.rotateX(-Math.PI / 2);
-			event_door.position.set(-2.5, -1, 0);
-			scene.add(event_door);
-			eventObj.push(event_door);
+            var intVec = new THREE.Vector3(0, 0, -1);
+            var intRay = new THREE.Raycaster(yawObject.position, intVec, 0.05, 2);
+
+            var intersectInt = intRay.intersectObjects(intObj);
+            var intersectVisible = intRay.intersectObjects(intVisibility);
+
+            //EVENTS
+            var eventRay = new THREE.Raycaster(yawObject.position, vecD, 1, 3);
+            var intersectEvent = eventRay.intersectObjects(eventObj);
+
+            var eventMat = new THREE.MeshBasicMaterial({color : "red"});
+            var eventGeo = new THREE.PlaneBufferGeometry(1, 1);
+
+            var event_door = new THREE.Mesh(eventGeo, eventMat);
+            event_door.scale.set(5, 5, 1);
+            event_door.rotateX(-Math.PI / 2);
+            event_door.position.set(-2.5, -1, 0);
+            scene.add(event_door);
+            eventObj.push(event_door);
 			
             //LIGHTS
                 //DIRECTIONAL LIGHT
@@ -193,7 +193,7 @@
                 scene.add(directionalLight);
                 
                 //SPOT LIGHT
-                var spotLight_tv = new THREE.SpotLight("white", 1);
+                var spotLight_tv = new THREE.SpotLight("white", 0.7);
                 spotLight_tv.position.set(4.5, 0.8, 3.5);
                 spotLight_tv.shadowCameraVisible = false;
                 spotLight_tv.castShadow = true;
@@ -203,18 +203,18 @@
                 spotLight_tv.shadowCameraFar = 8;
                 scene.add(spotLight_tv);
 				
-				var point = new THREE.SpotLight("white", 1);
-				point.position.set(0, 3, 0);
-                point.shadowCameraVisible = true;
-                point.castShadow = true;
-                point.shadowDarkness = 0.5;
-                point.shadowCameraFov = 15;
-                point.shadowCameraNear = 0.1;
-                point.shadowCameraFar = 3.01;
-                scene.add(point);
+                var pointLight_lamp = new THREE.SpotLight("white", 1);
+                pointLight_lamp.position.set(0, 3, 0);
+                pointLight_lamp.shadowCameraVisible = true;
+                pointLight_lamp.castShadow = true;
+                pointLight_lamp.shadowDarkness = 0.5;
+                pointLight_lamp.shadowCameraFov = 15;
+                pointLight_lamp.shadowCameraNear = 0.1;
+                pointLight_lamp.shadowCameraFar = 3.01;
+                scene.add(pointLight_lamp);
                     
                 //POINT LIGHT
-                var pointLight_fire = new THREE.PointLight("yellow", 1, 3);
+                var pointLight_fire = new THREE.PointLight("yellow", 1, 2);
                 pointLight_fire.position.set(-3.4, 0.6, -2.8);
                 scene.add(pointLight_fire);
 
@@ -266,7 +266,7 @@
                 right.castShadow = true;
                 right.receiveShadow = true;
                 scene.add(front, back, left, right);
-				colObj.push(front, back, left, right);
+                colObj.push(front, back, left, right);
                 
                     //DOOR
                     var door_material = new THREE.MeshPhongMaterial({
@@ -576,14 +576,14 @@
 						scene.add(balkenZ3);
 					});
 					
-					//LAMP
-                    //loader.load("models/lamp.json", function(geometry){
-                    //    var material = new THREE.MeshPhongMaterial({color: "white", side: THREE.DoubleSide});
-                    //    var lamp = new THREE.Mesh(geometry, material);
-                    //    lamp.position.set(0, 3, 0);
-                    //    scene.add(lamp);
-                    //    point.add(lamp);
-                    //});
+                    //LAMP
+//                    loader.load("models/lamp.json", function(geometry){
+//                        var material = new THREE.MeshPhongMaterial({color: "white", side: THREE.DoubleSide});
+//                        var lamp = new THREE.Mesh(geometry, material);
+//                        lamp.position.set(0, 3, 0);
+//                        scene.add(lamp);
+//                        pointLight_lamp.add(lamp);
+//                    });
 
                 //GROUND
                     //GRASS
@@ -896,12 +896,33 @@
                 image_counter++;
             }
             
+            var inside = false;
+            function checkLights(){
+                //CHECK PLAYER POSITION
+                if((yawObject.position.x > -5) && (yawObject.position.x < 5) && (yawObject.position.z > -4) && (yawObject.position.z < 4)){
+                    inside = true;
+                }
+                else{
+                    inside = false;
+                }
+                
+                //TURN LIGHTS ON/OFF
+                if(!inside){
+                    spotLight_tv.visible = false;
+                    pointLight_fire.visible = false;
+                }
+                else{
+                    spotLight_tv.visible = true;
+                    pointLight_fire.visible = true;
+                }
+            }
+            
             function render(){                  
                 //MIRROR CUBECAMERA UPDATE
                 mirror.visible = false;
                 mirror_camera.updateCubeMap(renderer, scene);
                 mirror.visible = true;
-				
+		
                 //PARTICLE SYSTEM
                 updateParticleSystem();
                 
@@ -910,6 +931,9 @@
                 
                 //TV
                 video.update();
+                
+                //PLAYER
+                checkLights();
                                 
                 //RENDERER
                 renderer.render(scene,camera);	
