@@ -586,6 +586,7 @@
 					});
 					
                     //LAMP
+                    var lamp_animation = true;
                     var lamp_right = true; //for animation
                     var pivot_lamp = new THREE.Object3D();
                     pivot_lamp.position.y = 4;
@@ -626,6 +627,8 @@
                     }
                     
                     //HASSOCK
+                    var wind = true;
+                    var wind_on = true; //animation
                     var hassock_geometry = new THREE.PlaneBufferGeometry(1, 1);
                     var hassock_material = new THREE.MeshPhongMaterial({
                         map: THREE.ImageUtils.loadTexture("textures/ground/hassock.png"),
@@ -633,19 +636,12 @@
                         side: THREE.DoubleSide
                     });
                     
-                    var hassock = new THREE.Mesh(hassock_geometry, hassock_material);
-                    var hassock2 = new THREE.Mesh(hassock_geometry, hassock_material);
-                    hassock.position.set(0, 0.5, 10);
-                    hassock2.position.set(0, 0.5, 10);
-                    hassock2.rotateY(Math.PI/2);
-                    scene.add(hassock, hassock2);
-                    
                     var hassock_array = [100];
-                    for(var i = 0; i < 49; i++){
+                    for(var i = 0; i < 100; i+=2){
                         var j = i + 1;
                         do{
                             var x = Math.random() * 48 - 24;
-                            var y = 0.5;
+                            var y = 0.3;
                             var z = Math.random() * 60 - 20;
                         }while((x > -5.1) && (x < 5.1) || (z > -4.1) && (z < 4.1));
                         
@@ -1380,18 +1376,47 @@
                         }
                 }
                 
-                if(lamp_right){
-                    pivot_lamp.rotation.x += (Math.PI/4) / 60;
-                    if(pivot_lamp.rotation.x >= (Math.PI/8)){
-                        pivot_lamp.rotation.x = (Math.PI/8);
-                        lamp_right = false;
+                if(lamp_animation){
+                    if(lamp_right){
+                        pivot_lamp.rotation.x += (Math.PI/4) / 60;
+                        if(pivot_lamp.rotation.x >= (Math.PI/8)){
+                            pivot_lamp.rotation.x = (Math.PI/8);
+                            lamp_right = false;
+                        }
+                    }
+                    else{
+                        pivot_lamp.rotation.x -= (Math.PI/4) / 60;
+                        if(pivot_lamp.rotation.x <= -(Math.PI/8)){
+                            pivot_lamp.rotation.x = -(Math.PI/8);
+                            lamp_right = true;
+                        }
                     }
                 }
-                else{
-                    pivot_lamp.rotation.x -= (Math.PI/4) / 60;
-                    if(pivot_lamp.rotation.x <= -(Math.PI/8)){
-                        pivot_lamp.rotation.x = -(Math.PI/8);
-                        lamp_right = true;
+                
+                if(wind){
+                    if(wind_on){
+                        for(var i = 0; i < 100; i+=2){
+                            var j = i + 1;
+                            hassock_array[i].rotation.x += 0.02;
+                            hassock_array[j].rotation.x += 0.02;
+                            if(hassock_array[i].rotation.x >= 0.175){
+                                hassock_array[i].rotation.x = 0.175;
+                                hassock_array[j].rotation.x = 0.175;
+                                wind_on = false;
+                            }
+                        }
+                    }
+                    else{
+                        for(var i = 0; i < 100; i+=2){
+                            var j = i + 1;
+                            hassock_array[i].rotation.x -= 0.02;
+                            hassock_array[j].rotation.x -= 0.02;
+                            if(hassock_array[i].rotation.x <= 0){
+                                hassock_array[i].rotation.x = 0;
+                                hassock_array[j].rotation.x = 0;
+                                wind_on = true;
+                            }
+                        }
                     }
                 }
         }
