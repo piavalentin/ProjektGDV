@@ -70,7 +70,7 @@
             
             
             //RENDERER
-            var renderer = new THREE.WebGLRenderer({antialias: false}); //true
+            var renderer = new THREE.WebGLRenderer({antialias: true}); //true
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.shadowMapEnabled = true;
             renderer.shadowMapSoft = true;
@@ -193,30 +193,41 @@
                 scene.add(directionalLight);
                 
                 //SPOT LIGHT
-                var spotLight_tv = new THREE.SpotLight("white", 0.7);
+                var spotLight_tv = new THREE.SpotLight("white", 0.6);
                 spotLight_tv.position.set(4.5, 0.8, 3.5);
+                spotLight_tv.visible = true;
                 spotLight_tv.shadowCameraVisible = false;
                 spotLight_tv.castShadow = true;
                 spotLight_tv.shadowDarkness = 0.5;
                 spotLight_tv.shadowCameraFov = 25;               
                 spotLight_tv.shadowCameraNear = 0.1;
-                spotLight_tv.shadowCameraFar = 8;
+                spotLight_tv.shadowCameraFar = 3;
                 scene.add(spotLight_tv);
 				
                 var pointLight_lamp = new THREE.SpotLight("white", 1);
-                pointLight_lamp.position.set(0, 3, 0);
-                pointLight_lamp.shadowCameraVisible = true;
+                pointLight_lamp.position.y = -0.1;
+                pointLight_lamp.shadowCameraVisible = false;
                 pointLight_lamp.castShadow = true;
                 pointLight_lamp.shadowDarkness = 0.5;
                 pointLight_lamp.shadowCameraFov = 15;
                 pointLight_lamp.shadowCameraNear = 0.1;
                 pointLight_lamp.shadowCameraFar = 3.01;
                 scene.add(pointLight_lamp);
-                    
+                
+                var pointLight_lamp_target = new THREE.Object3D();
+                pointLight_lamp_target.position.y = -4;
+                scene.add(pointLight_lamp_target);
+                pointLight_lamp.target = pointLight_lamp_target;
+                
                 //POINT LIGHT
-                var pointLight_fire = new THREE.PointLight("yellow", 1, 2);
+                var pointLight_fire = new THREE.PointLight("yellow", 1, 3);
                 pointLight_fire.position.set(-3.4, 0.6, -2.8);
+                pointLight_fire.visible = true;
                 scene.add(pointLight_fire);
+                
+                //AMBIENTLIGHT
+//                var ambientLight = new THREE.AmbientLight(0x404040);
+//                scene.add(ambientLight);
 
 
             //GEOMETRY
@@ -276,7 +287,6 @@
                         side: THREE.DoubleSide
                     });                    
                     var door = new THREE.Mesh(new THREE.PlaneBufferGeometry(1.25, 2.25), door_material);
-                    //door.position.set(-3.625, 1.125, 4);
                     door.position.x = -0.625;
                     door.castShadow = true;
                     door.receiveShadow = true;
@@ -419,15 +429,14 @@
                         var fire_place = new THREE.Mesh(geometry, material);
                         fire_place.rotateY(-Math.PI/2);
                         fire_place.position.set(-3.4, 0.6, -3.3);
-                        fire_place.receiveShadow = true;
                         fire_place.castShadow = true;
                         scene.add(fire_place);
-						var m = new THREE.MeshBasicMaterial({color: "black"});
-						var g = new THREE.BoxGeometry(2, 2, 0.8);
-						var h = new THREE.Mesh(g, m);
-						h.position.set(-3.4, 1, -3.5);
-						h.visible = false;
-						scene.add(h);
+                        var m = new THREE.MeshBasicMaterial({color: "black"});
+                        var g = new THREE.BoxGeometry(2, 2, 0.8);
+                        var h = new THREE.Mesh(g, m);
+                        h.position.set(-3.4, 1, -3.5);
+                        h.visible = false;
+                        scene.add(h);
                         colObj.push(h);
                     });
                     
@@ -451,7 +460,7 @@
                     scene.add(wood);
                     
                     //MIRROR
-                    var mirror_camera = new THREE.CubeCamera(0.1, 15, 128); //1024
+                    var mirror_camera = new THREE.CubeCamera(0.1, 15, 512);
                     mirror_camera.position.set(0, 1.5, -3.99);
                     scene.add(mirror_camera);
                     
@@ -577,13 +586,20 @@
 					});
 					
                     //LAMP
-//                    loader.load("models/lamp.json", function(geometry){
-//                        var material = new THREE.MeshPhongMaterial({color: "white", side: THREE.DoubleSide});
-//                        var lamp = new THREE.Mesh(geometry, material);
-//                        lamp.position.set(0, 3, 0);
-//                        scene.add(lamp);
-//                        pointLight_lamp.add(lamp);
-//                    });
+                    var lamp_right = true; //for animation
+                    var pivot_lamp = new THREE.Object3D();
+                    pivot_lamp.position.y = 4;
+                    scene.add(pivot_lamp);
+                    pivot_lamp.add(pointLight_lamp_target);
+                    loader.load("models/lamp.json", function(geometry){
+                        var material = new THREE.MeshPhongMaterial({color: "white", side: THREE.DoubleSide});
+                        var lamp = new THREE.Mesh(geometry, material);
+                        lamp.position.set(0, -1, 0);
+                        scene.add(lamp);
+                        pivot_lamp.add(lamp);
+                        lamp.add(pointLight_lamp);
+                    });
+                    
 
                 //GROUND
                     //GRASS
@@ -896,10 +912,10 @@
                 image_counter++;
             }
             
-            var inside = false;
+            var inside = true;
             function checkLights(){
                 //CHECK PLAYER POSITION
-                if((yawObject.position.x > -5) && (yawObject.position.x < 5) && (yawObject.position.z > -4) && (yawObject.position.z < 4)){
+                if((yawObject.position.x > -5) && (yawObject.position.x < 5) && (yawObject.position.z > -4) && (yawObject.position.z < 4.5)){
                     inside = true;
                 }
                 else{
@@ -910,10 +926,12 @@
                 if(!inside){
                     spotLight_tv.visible = false;
                     pointLight_fire.visible = false;
+                    pointLight_lamp.visible = false;
                 }
                 else{
                     spotLight_tv.visible = true;
                     pointLight_fire.visible = true;
+                    pointLight_lamp.visible = true;
                 }
             }
             
@@ -922,7 +940,7 @@
                 mirror.visible = false;
                 mirror_camera.updateCubeMap(renderer, scene);
                 mirror.visible = true;
-		
+                
                 //PARTICLE SYSTEM
                 updateParticleSystem();
                 
@@ -932,7 +950,7 @@
                 //TV
                 video.update();
                 
-                //PLAYER
+                //LIGHTS
                 checkLights();
                                 
                 //RENDERER
@@ -1252,9 +1270,6 @@
 							}
 						}
 					}
-					//if(key_Q){
-						//    pivot.rotation.y = -Math.PI/2;
-						//}
                 };
 
                 var onKeyUp = function(event){
@@ -1344,26 +1359,41 @@
 
 			}
 			
-			if(doorAnim) {
-				if(open) {
-					pivot.rotation.y += (Math.PI/2) / 60;
-					
-					if(pivot.rotation.y >= 0) {
-						pivot.rotation.y = 0;
-						doorAnim = false;
-						open = false;
-					}
-				}
-				else {
-					pivot.rotation.y -= (Math.PI/2) / 60;
-					
-					if(pivot.rotation.y <= -Math.PI/2) {
-						pivot.rotation.y = -Math.PI/2;
-						doorAnim = false;
-						open = true;
-					}
-				}
-			}
+                if(doorAnim) {
+                        if(open) {
+                                pivot.rotation.y += (Math.PI/2) / 60;
+
+                                if(pivot.rotation.y >= 0) {
+                                        pivot.rotation.y = 0;
+                                        doorAnim = false;
+                                        open = false;
+                                }
+                        }
+                        else {
+                                pivot.rotation.y -= (Math.PI/2) / 60;
+
+                                if(pivot.rotation.y <= -Math.PI/2) {
+                                        pivot.rotation.y = -Math.PI/2;
+                                        doorAnim = false;
+                                        open = true;
+                                }
+                        }
+                }
+                
+                if(lamp_right){
+                    pivot_lamp.rotation.x += (Math.PI/4) / 60;
+                    if(pivot_lamp.rotation.x >= (Math.PI/8)){
+                        pivot_lamp.rotation.x = (Math.PI/8);
+                        lamp_right = false;
+                    }
+                }
+                else{
+                    pivot_lamp.rotation.x -= (Math.PI/4) / 60;
+                    if(pivot_lamp.rotation.x <= -(Math.PI/8)){
+                        pivot_lamp.rotation.x = -(Math.PI/8);
+                        lamp_right = true;
+                    }
+                }
         }
         render();
         </script>
