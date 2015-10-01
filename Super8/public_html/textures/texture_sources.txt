@@ -36,3 +36,12 @@ http://www.yourinformationhub.com/wp-content/uploads/2013/09/8847390_xl.jpg
 
 hassock:
 http://dc461.4shared.com/img/Smh8OtVL/s3/136faa57850/grass__7_
+
+balken:
+http://www.cgtextures.com/texview_oldstyle.php?id=53465&s=s&PHPSESSID=60vtjjl1fn7q4k8saek37clm85
+
+brick wall:
+http://www.cgtextures.com/texview_oldstyle.php?id=88965&s=m&PHPSESSID=60vtjjl1fn7q4k8saek37clm85
+
+wood (kueche, tv_schrank):
+http://www.cgtextures.com/texview_oldstyle.php?id=16388&s=s&PHPSESSID=60vtjjl1fn7q4k8saek37clm85
