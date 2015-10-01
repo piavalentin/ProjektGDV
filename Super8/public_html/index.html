@@ -88,7 +88,6 @@
 			
             //CONTROLS
             var controlsEnabled = false;
-
             var moveForward = false;
             var moveBackward = false;
             var moveLeft = false;
@@ -102,13 +101,10 @@
             var key_E = false;
 			
 			var reset_E = true;
-
             for (var i = 0; i < keys.length; i++) {
                     keys[i] = false;
             }
-
 			window.addEventListener('click', mouseClick, false);
-
             var move = 0.1;
 			
 			//LOGIC
@@ -119,7 +115,6 @@
 			
             //COLLISION-RAYS
             var colObj = [];
-
             //VECTORS
             var dirF = new THREE.Vector3(0, 0, -1);
             var dirB = new THREE.Vector3(0, 0, 1);
@@ -138,7 +133,6 @@
 			var rayFD = new THREE.Raycaster(new THREE.Vector3().addVectors(yawObject.position, vecD), dirF, 0.05, 0.3);
             var rayFDL = new THREE.Raycaster(new THREE.Vector3().addVectors(yawObject.position, vecD), dirFL, 0.05, 0.42);
 			var rayFDR = new THREE.Raycaster(new THREE.Vector3().addVectors(yawObject.position, vecD), dirFR, 0.05, 0.42);
-
             //BACK
             var rayBU = new THREE.Raycaster(yawObject.position, dirB, 0.05, 0.3);
             var rayBUL = new THREE.Raycaster(yawObject.position, dirBL, 0.05, 0.42);
@@ -146,29 +140,22 @@
 			var rayBD = new THREE.Raycaster(new THREE.Vector3().addVectors(yawObject.position, vecD), dirB, 0.05, 0.3);
             var rayBDL = new THREE.Raycaster(new THREE.Vector3().addVectors(yawObject.position, vecD), dirBL, 0.05, 0.42);
 			var rayBDR = new THREE.Raycaster(new THREE.Vector3().addVectors(yawObject.position, vecD), dirBR, 0.05, 0.42);
-
             //LEFT
             var rayLU = new THREE.Raycaster(yawObject.position, dirL, 0.05, 0.3);
 			var rayLD = new THREE.Raycaster(new THREE.Vector3().addVectors(yawObject.position, vecD), dirL, 0.05, 0.3);
-
             //RIGHT
             var rayRU = new THREE.Raycaster(yawObject.position, dirR, 0.05, 0.3);
 			var rayRD = new THREE.Raycaster(new THREE.Vector3().addVectors(yawObject.position, vecD), dirR, 0.05, 0.3);
-
             //INTERACTION
             var intVec = new THREE.Vector3(0, 0, -1);
             var intRay = new THREE.Raycaster(yawObject.position, intVec, 0.05, 2);
-
             var intersectInt = intRay.intersectObjects(intObj);
             var intersectVisible = intRay.intersectObjects(intVisibility);
-
             //EVENTS
             var eventRay = new THREE.Raycaster(yawObject.position, vecD, 1, 3);
             var intersectEvent = eventRay.intersectObjects(eventObj);
-
             var eventMat = new THREE.MeshBasicMaterial({color : "red"});
             var eventGeo = new THREE.PlaneBufferGeometry(1, 1);
-
             var event_door = new THREE.Mesh(eventGeo, eventMat);
             event_door.scale.set(5, 5, 1);
             event_door.rotateX(-Math.PI / 2);
@@ -182,10 +169,8 @@
                 directionalLight.position.set(40, 40, 40);
                 directionalLight.castShadow = true;
                 directionalLight.shadowDarkness = 0.4;
-
                 directionalLight.shadowCameraNear = 0;
                 directionalLight.shadowCameraFar = 100;
-
                 directionalLight.shadowCameraLeft = -35;
                 directionalLight.shadowCameraRight = 35;
                 directionalLight.shadowCameraTop = 35;
@@ -231,7 +216,6 @@
                 //AMBIENTLIGHT
 //                var ambientLight = new THREE.AmbientLight(0x404040);
 //                scene.add(ambientLight);
-
 				//FLASHLIGHT
 				var flashlight = new THREE.SpotLight("white", 1);
 				flashlight.shadowCameraVisible = true;
@@ -242,14 +226,11 @@
 				flashlight.target = camera;
 				scene.add(flashlight);
 				pitchObject.add(flashlight);
-
-
             //GEOMETRY
                 //SKYBOX
                 var imagePrefix = "textures/skybox/";
                 var directions  = ["xpos", "xneg", "ypos", "yneg", "zpos", "zneg"];
                 var imageSuffix = ".jpg";
-
                 var skybox_array = [];
                 for (var i = 0; i < 6; i++){
                     skybox_array.push(new THREE.MeshBasicMaterial({
@@ -361,28 +342,15 @@
                     // floor.receiveShadow = true;
                     // scene.add(floor);
                 
-<<<<<<< HEAD
-                    
-                
-                
-                    //ROOF SIDES
-                    var roof_side_geometry = new THREE.Geometry();
-                    roof_side_geometry.vertices.push(new THREE.Vector3(-5, 4, 0));
-                    roof_side_geometry.vertices.push(new THREE.Vector3(-5, 2.5, -4));
-                    roof_side_geometry.vertices.push(new THREE.Vector3(-5, 2.5, 4));
-=======
                     // //ROOF SIDES
                     // var roof_side_geometry = new THREE.Geometry();
                     // roof_side_geometry.vertices.push(new THREE.Vector3(-5, 4, 0));
                     // roof_side_geometry.vertices.push(new THREE.Vector3(-5, 2.5, -4));
                     // roof_side_geometry.vertices.push(new THREE.Vector3(-5, 2.5, 4));
->>>>>>> origin/master
-
                     // var uvs = [];
                     // uvs.push(new THREE.Vector2(0.5, 1));
                     // uvs.push(new THREE.Vector2(0, 0));
                     // uvs.push(new THREE.Vector2(1, 0));
-
                     // roof_side_geometry.faces.push(new THREE.Face3(0,1,2));
                     // roof_side_geometry.computeFaceNormals();
                     // roof_side_geometry.faceVertexUvs[0].push([uvs[0], uvs[1], uvs[2]]);
@@ -396,13 +364,11 @@
                     // side_left.castShadow = true;
                     // side_left.receiveShadow = true;
                     // scene.add(side_left);
-
                     // var side_right = side_left.clone();
                     // side_right.position.x = 10;
                     // side_right.castShadow = true;
                     // side_right.receiveShadow = true;
                     // scene.add(side_right);
-
                     // //ROOFTOP
                     // var roof_top_geometry = new THREE.PlaneGeometry(11, 4.5);
                     // var roof_top_material = new THREE.MeshPhongMaterial({
@@ -419,7 +385,6 @@
                     // roof_top_front.castShadow = true;
                     // roof_top_front.receiveShadow = true;
                     // scene.add(roof_top_front);
-
                     // var roof_top_back = new THREE.Mesh(roof_top_geometry, roof_top_material);
                     // roof_top_back.rotateY(-Math.PI);
                     // roof_top_back.rotateX(-1.21);
@@ -499,16 +464,11 @@
                     var mirror = new THREE.Mesh(new THREE.PlaneBufferGeometry(1, 1.2), new THREE.MeshPhongMaterial({envMap: mirror_camera.renderTarget}));
                     mirror.position.set(0, 1.5, -3.99);
                     scene.add(mirror);
-<<<<<<< Updated upstream
 					
 					var testaudio = new Audio('whitenoise.mp3');
 					if(camera.lookAt(mirror_camera)){
 						testaudio.play();
 					}
-=======
-                   
-                   
->>>>>>> Stashed changes
                     
                     //TV
                     loader.load("models/tv.json", function(geometry){
@@ -530,7 +490,6 @@
                     screen.rotateY(-2.18);
                     screen.position.set(4.1, 1.38, 3.125);
                     scene.add(screen);
-
 					//TV-SCHRANK
 					var tv_schrank = null;
 					loader.load("models/tv_schrank.json", function(geometry, materials){
@@ -817,33 +776,26 @@
                         var fence_array = [48];
                         for(var i = 0; i < 10; i++){
                             var j = i + 11;
-
                             fence_array[i] = new THREE.Mesh(fence_geometry, fence_material);
                             fence_array[i].position.set(a, 1, -25);
-
                             fence_array[j] = new THREE.Mesh(fence_geometry, fence_material);
                             fence_array[j].rotateY(Math.PI);
                             fence_array[j].position.set(a, 1, 40);
-
                             scene.add(fence_array[i], fence_array[j]);
                             colObj.push(fence_array[i], fence_array[j]);
                             a += 5;
                         }
-
                         //LEFT & RIGHT
                         a = -22.5;
                         for(var i = 0; i < 13; i++){
                             var k = i + 22;
                             var l = k + 13;
-
                             fence_array[k] = new THREE.Mesh(fence_geometry, fence_material);
                             fence_array[k].position.set(-25, 1, a);
                             fence_array[k].rotateY(Math.PI/2);
-
                             fence_array[l] = new THREE.Mesh(fence_geometry, fence_material);
                             fence_array[l].position.set(25, 1, a);
                             fence_array[l].rotateY(-Math.PI/2);
-
                             scene.add(fence_array[k], fence_array[l]);
                             colObj.push(fence_array[k], fence_array[l]);
                             a += 5;
@@ -943,7 +895,6 @@
                         colObj.push(th8);
                         colObj.push(th9);
                     });
-
                 //PARTICLE SYSTEM
                     //RAIN
                     var rain_particle_count = 50000;
@@ -953,14 +904,12 @@
                         size: 0.1,
                         alphaTest: 0.1
                     });
-
                     for(var p = 0; p < rain_particle_count; p++){
                         var x = Math.random() * 60 - 30;
                         var y = Math.random() * 10 + 8;
                         var z = Math.random() * 70 - 30;
                         rain_particles.vertices.push(new THREE.Vector3(x, y, z));
                     }
-
                     var rain_particle_system = new THREE.PointCloud(rain_particles, rain_particle_material);
                     scene.add(rain_particle_system); 
                     
@@ -974,14 +923,12 @@
                         transparent: true,
                         opacity: 0.8
                     });
-
                     for(var p = 0; p < smoke_count; p++){
                         var x = Math.random() * (-3.6 + 3.2) - 3.2;
                         var y = Math.random() * 5.2 + 5;
                         var z = Math.random() * (-3.6 + 3.2) - 3.2;
                         smoke_particles.vertices.push(new THREE.Vector3(x, y, z));
                     }
-
                     var smoke_particle_system = new THREE.PointCloud(smoke_particles, smoke_particle_material);
                     scene.add(smoke_particle_system);
                     
@@ -1070,7 +1017,6 @@
                                 
                 //RENDERER
                 renderer.render(scene,camera);	
-
 				update();
 				
                 requestAnimationFrame(render);                
@@ -1271,7 +1217,6 @@
             var havePointerLock = 'pointerLockElement' in document || 
                     'mozPointerLockElement' in document || 
                     'webkitPointerLockElement' in document;
-
             if(havePointerLock){
                 var element = document.body;
                 var pointerlockchange = function(event){
@@ -1294,16 +1239,13 @@
                 var pointerlockerror = function (event){
                     anleitung.style.display = '';
                 };
-
 		// Hook pointer lock state change events
                 document.addEventListener('pointerlockchange', pointerlockchange, false);
                 document.addEventListener('mozpointerlockchange', pointerlockchange, false);
                 document.addEventListener('webkitpointerlockchange', pointerlockchange, false);
-
                 document.addEventListener('pointerlockerror', pointerlockerror, false);
                 document.addEventListener('mozpointerlockerror', pointerlockerror, false);
                 document.addEventListener('webkitpointerlockerror', pointerlockerror, false);
-
                 anleitung.addEventListener('click', function(event){
                     anleitung.style.display = 'none';
                     
@@ -1325,13 +1267,11 @@
             else{
                 anleitung.innerHTML = 'Oh wie uncool. <br>Dein Browser unterstützt Pointer Lock API nicht.<br>Probier es mal mit Firefox.<br>Oder wenn es sein muss mit Chrome.';
             }
-
             var prevTime = performance.now();
             var tempo = new THREE.Vector3();
             
             var walksound = new Audio('sounds/walk.mp3');
             var dooropensound = new Audio('sounds/squeaking-old-door-open.mp3');
-
             checkKeys();
             animate();
 			
@@ -1380,7 +1320,6 @@
 						}
 					}
                 };
-
                 var onKeyUp = function(event){
                     // up oder w
                     if(event.keyCode === 38 || event.keyCode === 87) {
@@ -1407,7 +1346,6 @@
 						reset_E = true;
 					}
                 };
-
             document.addEventListener('keydown', onKeyDown, false);
             document.addEventListener('keyup', onKeyUp, false); 
         }
@@ -1424,7 +1362,6 @@
 				
                 tempo.x -= tempo.x * 10.0 * delta;
                 tempo.z -= tempo.z * 10.0 * delta;
-
                 if(moveForward){
 					if (checkCollision(rayFU, rayFUL, rayFUR, rayFD, rayFDL, rayFDR)) {
 							tempo.z = 0;
@@ -1457,17 +1394,14 @@
 						tempo.x += 25.0 * delta;
 					}
 				}
-
                 controls.getObject().translateX( tempo.x * delta );
                 controls.getObject().translateZ( tempo.z * delta );
                 prevTime = time;
-
 			}
 			
                 if(doorAnim) {
 					if(doorOpen) {
 						pivot.rotation.y += (Math.PI/2) / 60;
-
 						if(pivot.rotation.y >= 0) {
 								pivot.rotation.y = 0;
 								doorAnim = false;
@@ -1476,7 +1410,6 @@
 					}
 					else {
 						pivot.rotation.y -= (Math.PI/2) / 60;
-
 						if(pivot.rotation.y <= -Math.PI/2) {
 								pivot.rotation.y = -Math.PI/2;
 								doorAnim = false;
