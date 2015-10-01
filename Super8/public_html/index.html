@@ -62,7 +62,7 @@
             
             //SCENE
             var scene = new THREE.Scene();
-            scene.fog = new THREE.Fog("grey", 0, 30);            
+            scene.fog = new THREE.Fog(0x12151a, 0, 20);            
             
             
             //CAMERA
@@ -80,15 +80,6 @@
 			//SOUND
 			var walksound = new Audio('sounds/walk.mp3');
             var dooropensound = new Audio('sounds/squeaking-old-door-open.mp3');
-			
-			//DOOR
-			var doorOpen = false;
-			var sl1Open = false;
-			var sl2Open = false;
-			var doorAnim = false;
-			var sl1Anim = false;
-			var sl2Anim = false;
-			var locked = false;
 			
             //CONTROLS
             var controlsEnabled = false;
@@ -116,6 +107,15 @@
 			var eventObj = [];
 			var intVisibility = [];
 			var inventory = [];
+			
+			var doorOpen = false;
+			var sl1Open = false;
+			var sl2Open = false;
+			var doorAnim = false;
+			var sl1Anim = false;
+			var sl2Anim = false;
+			var locked = false;
+			var fireBrightness = 0;
 			
             //COLLISION-RAYS
             var colObj = [];
@@ -169,9 +169,9 @@
 			
             //LIGHTS
                 //DIRECTIONAL LIGHT
-                var directionalLight = new THREE.DirectionalLight("white", 0.1);
+                var directionalLight = new THREE.DirectionalLight(0xe5f1ff, 0.07);
                 directionalLight.position.set(40, 40, 40);
-                directionalLight.castShadow = true;
+                directionalLight.castShadow = false;
                 directionalLight.shadowDarkness = 0.4;
                 directionalLight.shadowCameraNear = 0;
                 directionalLight.shadowCameraFar = 100;
@@ -190,17 +190,17 @@
                 spotLight_tv.visible = true;
                 spotLight_tv.shadowCameraVisible = false;
                 spotLight_tv.castShadow = true;
-                spotLight_tv.shadowDarkness = 0.4;
+                spotLight_tv.shadowDarkness = 0.3;
                 spotLight_tv.shadowCameraFov = 90;               
                 spotLight_tv.shadowCameraNear = 0.1;
                 spotLight_tv.shadowCameraFar = 10;
                 scene.add(spotLight_tv);
 				
-                var pointLight_lamp = new THREE.SpotLight("white", 1);
+                var pointLight_lamp = new THREE.SpotLight(0xfffce5, 1);
                 pointLight_lamp.position.y = -0.1;
                 pointLight_lamp.shadowCameraVisible = false;
                 pointLight_lamp.castShadow = true;
-                pointLight_lamp.shadowDarkness = 0.4;
+                pointLight_lamp.shadowDarkness = 0.3;
                 pointLight_lamp.shadowCameraFov = 90;
                 pointLight_lamp.shadowCameraNear = 0.1;
                 pointLight_lamp.shadowCameraFar = 5.01;
@@ -216,7 +216,7 @@
                 pointLight_fire.position.set(0, 0.6, 2.8);
                 pointLight_fire.visible = true;
 				pointLight_fire.castShadow = true;
-				pointLight_fire.shadowDarkness = 0.4;
+				pointLight_fire.shadowDarkness = 0.3;
                 pointLight_fire.shadowCameraFov = 90;
                 pointLight_fire.shadowCameraNear = 0.1;
                 pointLight_fire.shadowCameraFar = 10.01;
@@ -227,10 +227,9 @@
 //                scene.add(ambientLight);
 				//FLASHLIGHT
 				var flashlight = new THREE.SpotLight("white", 1);
-				flashlight.shadowCameraVisible = true;
-                flashlight.castShadow = true;
+				flashlight.shadowCameraVisible = false;
 				flashlight.angle = Math.PI/8;
-				flashlight.distance = 7;
+				flashlight.distance = 10;
 				flashlight.position.set(0, 0, 0.2);
 				flashlight.target = camera;
 				scene.add(flashlight);
@@ -554,6 +553,9 @@
                         couch = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial(materials));
 						couch.castShadow = true;
 						couch.receiveShadow = true;
+						couch.scale.set(0.7, 1, 1);
+						couch.rotateY(1);
+						couch.position.set(2.3, 0, 1.8);
 						scene.add(couch);
 						colObj.push(couch);
 					});
@@ -572,7 +574,7 @@
                         balkenY1 = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial(materials));
 						balkenY1.castShadow = true;
 						balkenY1.receiveShadow = true;
-						balkenY1.position.set(0, -0.15, 0);
+						balkenY1.position.set(-0.5, -0.15, 0);
 						scene.add(balkenY1);
 					});
 					var balkenY2 = new THREE.Object3D();
@@ -596,7 +598,7 @@
                         balkenZ1 = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial(materials));
 						balkenZ1.castShadow = true;
 						balkenZ1.receiveShadow = true;
-						balkenZ1.position.set(0, -0.15, 0);
+						balkenZ1.position.set(-0.5, -0.15, 0);
 						scene.add(balkenZ1);
 					});
 					var balkenZ2 = new THREE.Object3D();
@@ -744,12 +746,13 @@
                     //LAMP
                     var lamp_right = true; //for animation
                     var pivot_lamp = new THREE.Object3D();
-                    pivot_lamp.position.y = 4;
+                    pivot_lamp.position.y = 3;
                     scene.add(pivot_lamp);
                     pivot_lamp.add(pointLight_lamp_target);
                     loader.load("models/lamp.json", function(geometry){
                         var material = new THREE.MeshPhongMaterial({color: "white", side: THREE.DoubleSide});
                         var lamp = new THREE.Mesh(geometry, material);
+						lamp.scale.set(1, 0.5, 1);
                         lamp.position.set(0, -1, 0);
                         scene.add(lamp);
                         pivot_lamp.add(lamp);
@@ -761,6 +764,7 @@
 					var ground = new THREE.Object3D();
 					loader.load("models/ground.json", function(geometry, materials){
                         var ground = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial(materials));
+						ground.receiveShadows = true;
                         scene.add(ground);
                     });
 					
@@ -1046,14 +1050,16 @@
                 
                 //TURN LIGHTS ON/OFF
                 if(!inside){
-                    spotLight_tv.visible = false;
-                    pointLight_fire.visible = false;
-                    pointLight_lamp.visible = false;
+                    spotLight_tv.intensity = 0;
+                    pointLight_fire.intensity = 0;
+                    pointLight_lamp.intensity = 0;
+					directionalLight.intensity = 0.07;
                 }
                 else{
-                    spotLight_tv.visible = true;
-                    pointLight_fire.visible = true;
-                    pointLight_lamp.visible = true;
+                    spotLight_tv.intensity = 0.6;
+                    pointLight_fire.intensity = fireBrightness;
+                    pointLight_lamp.intensity = 1;
+					directionalLight.intensity = 0;
                 }
             }
             
@@ -1073,7 +1079,7 @@
                 video.update();
                 
                 //LIGHTS
-                //checkLights();
+                checkLights();
                                 
                 //RENDERER
                 renderer.render(scene,camera);	
@@ -1243,7 +1249,7 @@
 					if(pointLight_fire.intensity === 0) {
 						var index = inventory.indexOf(matches);
 						if(index != -1) {
-							pointLight_fire.intensity = 1;
+							fireBrightness = 1;
 						}
 					}
 				}
