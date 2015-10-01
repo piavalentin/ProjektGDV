@@ -337,6 +337,9 @@
                     floor.receiveShadow = true;
                     scene.add(floor);
                 
+                    
+                
+                
                     //ROOF SIDES
                     var roof_side_geometry = new THREE.Geometry();
                     roof_side_geometry.vertices.push(new THREE.Vector3(-5, 4, 0));
@@ -456,11 +459,16 @@
                     var mirror = new THREE.Mesh(new THREE.PlaneBufferGeometry(1, 1.2), new THREE.MeshPhongMaterial({envMap: mirror_camera.renderTarget}));
                     mirror.position.set(0, 1.5, -3.99);
                     scene.add(mirror);
+<<<<<<< Updated upstream
 					
 					var testaudio = new Audio('whitenoise.mp3');
 					if(camera.lookAt(mirror_camera)){
 						testaudio.play();
 					}
+=======
+                   
+                   
+>>>>>>> Stashed changes
                     
                     //TV
                     loader.load("models/tv.json", function(geometry){
