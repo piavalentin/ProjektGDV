@@ -76,6 +76,10 @@
 			
 			//SOUND
 			var walksound = new Audio('sounds/walk.mp3');
+			var laughsound = new Audio('sounds/evilaughter.wav');
+			laughsound.volume = 0.4;
+			var screamsound = new Audio('sounds/ghostscream.wav');
+			screamsound.volume = 0.4;
             var dooropensound = new Audio('sounds/squeaking-old-door-open.mp3');
 			
             //CONTROLS
@@ -120,6 +124,9 @@
 			var brokenLight = false;
 			var switchOn = false;
 			var lampXRotationSpeed = 0.07;
+			var lampZRotationSpeed = 0.03;
+			var lamp2XRotationSpeed = 0.05;
+			var lamp2ZRotationSpeed = 0.02;
 			var batteryDead = false;
 			var dyingLight = 1.0;
 			var dlCounter = 0;
@@ -227,11 +234,29 @@
                 pointLight_lamp.shadowCameraNear = 0.1;
                 pointLight_lamp.shadowCameraFar = 5.01;
                 scene.add(pointLight_lamp);
+				
+				var pointLight_lamp2 = new THREE.SpotLight(0xfffce5, 1);
+                pointLight_lamp2.position.y = -0.1;
+                pointLight_lamp2.shadowCameraVisible = false;
+                pointLight_lamp2.castShadow = true;
+				pointLight_lamp2.distance = 10;
+				pointLight_lamp2.angle = Math.PI/2;
+				pointLight_lamp2.exponent = 1.5;
+                pointLight_lamp2.shadowDarkness = 0.3;
+                pointLight_lamp2.shadowCameraFov = 90;
+                pointLight_lamp2.shadowCameraNear = 0.1;
+                pointLight_lamp2.shadowCameraFar = 5.01;
+                scene.add(pointLight_lamp2);
                 
                 var pointLight_lamp_target = new THREE.Object3D();
                 pointLight_lamp_target.position.y = -4;
                 scene.add(pointLight_lamp_target);
                 pointLight_lamp.target = pointLight_lamp_target;
+				
+				var pointLight_lamp_target2 = new THREE.Object3D();
+                pointLight_lamp_target2.position.y = -4;
+                scene.add(pointLight_lamp_target2);
+                pointLight_lamp2.target = pointLight_lamp_target2;
                 
                 //POINT LIGHT
                 var pointLight_fire = new THREE.PointLight(0xffd460, 0, 3);
@@ -449,7 +474,14 @@
 						kueche.receiveShadow = true;
 						kueche.position.set(0, -0.15, 0);
 						scene.add(kueche);
-						colObj.push(kueche);
+					});
+					var kuecheHitbox = new THREE.Object3D();
+					loader.load("models/kuecheHB.json", function(geometry, materials){
+                        kuecheHitbox = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({color: "black"}));
+						kuecheHitbox.visible = false;
+						kuecheHitbox.position.set(0, -0.15, 0);
+						scene.add(kuecheHitbox);
+						colObj.push(kuecheHitbox);
 					});
 					
 					//COUCH
@@ -462,7 +494,16 @@
 						couch.rotateY(1);
 						couch.position.set(2.3, 0, 1.8);
 						scene.add(couch);
-						colObj.push(couch);
+					});
+					var couchHitbox = new THREE.Object3D();
+					loader.load("models/couchHB.json", function(geometry){
+                        couchHitbox = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({color: "black"}));
+						couchHitbox.visible = false;
+						couchHitbox.scale.set(0.7, 1, 1);
+						couchHitbox.rotateY(1);
+						couchHitbox.position.set(2.3, 0, 1.8);
+						scene.add(couchHitbox);
+						colObj.push(couchHitbox);
 					});
 					
 					//BALKEN
@@ -726,6 +767,20 @@
                         lamp.add(pointLight_lamp);
                     });
 					
+					var pivot_lamp2 = new THREE.Object3D();
+                    pivot_lamp2.position.set(-3, 2.4, 0);
+                    scene.add(pivot_lamp2);
+                    pivot_lamp2.add(pointLight_lamp_target2);
+                    loader.load("models/lamp.json", function(geometry){
+                        var material = new THREE.MeshPhongMaterial({color: "white", side: THREE.DoubleSide});
+                        var lamp2 = new THREE.Mesh(geometry, material);
+						lamp2.scale.set(1, 0.5, 1);
+                        lamp2.position.set(0, -0.5, 0);
+                        scene.add(lamp2);
+                        pivot_lamp2.add(lamp2);
+                        lamp2.add(pointLight_lamp2);
+                    });
+					
                 //GROUND
                     //GRASS
 					var ground = new THREE.Object3D();
@@ -960,6 +1015,7 @@
                         smoke_particles.vertices.push(new THREE.Vector3(x, y, z));
                     }
                     var smoke_particle_system = new THREE.PointCloud(smoke_particles, smoke_particle_material);
+					smoke_particle_system.visible = false;
                     scene.add(smoke_particle_system);
                     
             
@@ -1019,6 +1075,7 @@
                     spotLight_tv.intensity = 0;
                     pointLight_fire.intensity = 0;
                     pointLight_lamp.intensity = 0;
+					pointLight_lamp2.intensity = 0;
 					directionalLight.intensity = 0.07;
 					directionalLight.castShadow = true;
                 }
@@ -1026,6 +1083,7 @@
                     spotLight_tv.intensity = tvBrightness;
                     pointLight_fire.intensity = fireBrightness;
                     pointLight_lamp.intensity = lampBrightness;
+					pointLight_lamp2.intensity = lampBrightness;
 					directionalLight.intensity = 0;
 					directionalLight.castShadow = false;
                 }
@@ -1243,6 +1301,7 @@
                             fire.visible = true;
 							batteryDead = true;
 							dlCounter = 240;
+							smoke_particle_system.visible = true;
 						}
 					}
 				}
@@ -1253,6 +1312,7 @@
 						lightSwitch.position.set(-4.86, 1.5, 2);
 						lampBrightness = 0;
 						pointLight_lamp.castShadow = false;
+						pointLight_lamp2.castShadow = false;
 						switchOn = false;
 					}
 					else{
@@ -1260,6 +1320,7 @@
 						lightSwitch.rotateZ(1.22);
 						lightSwitch.position.set(-4.86, 1.5, 2);
 						pointLight_lamp.castShadow = true;
+						pointLight_lamp2.castShadow = true;
 						switchOn = true;
 						if(!brokenLight) {
 							lampBrightness = 1;
@@ -1284,6 +1345,7 @@
 							if(doorOpen && !doorAnim) {
 								doorAnim = true;
 								dooropensound.play();
+								laughsound.play();
 							}
 							locked = true;
 							doorInt.material = new THREE.MeshBasicMaterial({color: "red", transparent: true, opacity: 0.2});
@@ -1301,6 +1363,7 @@
 							sl1Locked = false;
 							sl1Int.material = new THREE.MeshBasicMaterial({color: "blue", transparent: true, opacity: 0.2});
 							tvEventDone = true;
+							screamsound.play();
 						}
 					}
 				}
@@ -1392,7 +1455,7 @@
                     // up oder w
 					if(event.keyCode === 38 || event.keyCode === 87) {
 						moveForward = true;
-						walksound.play();
+							walksound.play();
                     }
                     // left oder a
                     if(event.keyCode === 37 || event.keyCode === 65) {
@@ -1607,27 +1670,35 @@
 				}
                 
                 if(lamp_animation){
-                    // if(lamp_right){
-                        // pivot_lamp.rotation.x += 0.02;
-                        // if(pivot_lamp.rotation.x >= (Math.PI / 4)){
-                            // pivot_lamp.rotation.x = (Math.PI / 4);
-                            // lamp_right = false;
-                        // }
-                    // }
-                    // else{
-                        // pivot_lamp.rotation.x -= 0.02;
-                        // if(pivot_lamp.rotation.x <= -(Math.PI / 4)){
-                            // pivot_lamp.rotation.x = -(Math.PI / 4);
-                            // lamp_right = true;
-                        // }
-                    // }
 					if(pivot_lamp.rotation.x > 0) {
 						lampXRotationSpeed -= 0.003;
 					}
 					if(pivot_lamp.rotation.x < 0) {
 						lampXRotationSpeed += 0.003;
 					}
+					if(pivot_lamp.rotation.z > 0) {
+						lampZRotationSpeed -= 0.0015;
+					}
+					if(pivot_lamp.rotation.x < 0) {
+						lampZRotationSpeed += 0.0015;
+					}
+					
+					if(pivot_lamp2.rotation.x > 0) {
+						lamp2XRotationSpeed -= 0.002;
+					}
+					if(pivot_lamp2.rotation.x < 0) {
+						lamp2XRotationSpeed += 0.002;
+					}
+					if(pivot_lamp2.rotation.z > 0) {
+						lamp2ZRotationSpeed -= 0.001;
+					}
+					if(pivot_lamp2.rotation.x < 0) {
+						lamp2ZRotationSpeed += 0.001;
+					}
 					pivot_lamp.rotation.x += lampXRotationSpeed;
+					pivot_lamp.rotation.z += lampZRotationSpeed;
+					pivot_lamp2.rotation.x += lamp2XRotationSpeed;
+					pivot_lamp2.rotation.z += lamp2ZRotationSpeed;
                 }
                 
                 if(wind){
