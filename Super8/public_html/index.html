@@ -57,9 +57,6 @@
         </div>
         
         <script>
-            
-            
-            
             //SCENE
             var scene = new THREE.Scene();
             scene.fog = new THREE.Fog(0x12151a, 0, 20);            
@@ -115,7 +112,22 @@
 			var sl1Anim = false;
 			var sl2Anim = false;
 			var locked = false;
+			var sl1Locked = true;
+			var sl2Locked = true;
 			var fireBrightness = 0;
+			var lampBrightness = 0;
+			var tvBrightness = 0;
+			var brokenLight = false;
+			var switchOn = false;
+			var lampXRotationSpeed = 0.07;
+			var batteryDead = false;
+			var dyingLight = 1.0;
+			var dlCounter = 0;
+			var flFlickerCounter = 0;
+			var lampFlickerCounter = 0;
+			var flickeringLights = false;
+			var lamp_animation = false;
+			var tvEventDone = false;
 			
             //COLLISION-RAYS
             var colObj = [];
@@ -167,11 +179,18 @@
             scene.add(event_door);
             eventObj.push(event_door);
 			
+			var event_tv = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), eventMat);
+			event_tv.visible = false;
+			event_tv.rotateX(-Math.PI / 2);
+			event_tv.position.set(3.5, 0, 2.5);
+			scene.add(event_tv);
+			eventObj.push(event_tv);
+			
             //LIGHTS
                 //DIRECTIONAL LIGHT
                 var directionalLight = new THREE.DirectionalLight(0xe5f1ff, 0.07);
                 directionalLight.position.set(40, 40, 40);
-                directionalLight.castShadow = false;
+                directionalLight.castShadow = true;
                 directionalLight.shadowDarkness = 0.4;
                 directionalLight.shadowCameraNear = 0;
                 directionalLight.shadowCameraFar = 100;
@@ -185,7 +204,7 @@
                 scene.add(directionalLight);
                 
                 //SPOT LIGHT
-                var spotLight_tv = new THREE.SpotLight("white", 0.6);
+                var spotLight_tv = new THREE.SpotLight("white", 0);
                 spotLight_tv.position.set(4.5, 1.4, 3.5);
                 spotLight_tv.visible = true;
                 spotLight_tv.shadowCameraVisible = false;
@@ -200,6 +219,9 @@
                 pointLight_lamp.position.y = -0.1;
                 pointLight_lamp.shadowCameraVisible = false;
                 pointLight_lamp.castShadow = true;
+				pointLight_lamp.distance = 10;
+				pointLight_lamp.angle = Math.PI/2;
+				pointLight_lamp.exponent = 1.5;
                 pointLight_lamp.shadowDarkness = 0.3;
                 pointLight_lamp.shadowCameraFov = 90;
                 pointLight_lamp.shadowCameraNear = 0.1;
@@ -225,6 +247,7 @@
 				//FLASHLIGHT
 				var flashlight = new THREE.SpotLight("white", 1);
 				flashlight.shadowCameraVisible = false;
+				flashlight.castshadow = true;
 				flashlight.angle = Math.PI/8;
 				flashlight.distance = 10;
 				flashlight.position.set(0, 0, 0.2);
@@ -380,11 +403,10 @@
                         colObj.push(tv);
                     });
                     
-                    var video = new THREEx.VideoTexture("video/white_noise.mp4");            
-                    var screen = new THREE.Mesh(new THREE.PlaneBufferGeometry(0.9, 0.7), new THREE.MeshBasicMaterial({
-                        map: video.texture,
-                        color: "white"
-                    }));
+                    var video = new THREEx.VideoTexture("video/white_noise.mp4");
+					var noiseTex = new THREE.MeshBasicMaterial({map: video.texture, color: "white"});
+					var blankTex = new THREE.MeshPhongMaterial({color: "black"});
+                    var screen = new THREE.Mesh(new THREE.PlaneBufferGeometry(0.9, 0.7), blankTex);
                     screen.rotateY(-2.18);
                     screen.position.set(4.1, 1.38, 3.125);
                     scene.add(screen);
@@ -543,7 +565,7 @@
 					});
 					var sl2Int = new THREE.Object3D();
 					loader.load("models/slk.json", function(geometry){
-                        sl2Int = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({color: "blue", transparent: true, opacity: 0.2}));
+                        sl2Int = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({color: "red", transparent: true, opacity: 0.2}));
 						sl2Int.visible = false;
 						sl2Int.scale.set(1.05, 1.05, 1.05);
 						//sl2Int.position.set(-3.65, 0.6, -3.54);
@@ -569,7 +591,14 @@
 						scene.add(sl4);
 					});
 					
-					//KEY			
+					//KEY	
+					var keyBox = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.2, 0.2), new THREE.MeshBasicMaterial({color: "black"}));
+					keyBox.visible = false;
+					keyBox.position.set(-2.55, 0.6, -3.54);
+					scene.add(keyBox);
+					intObj.push(keyBox);
+					intVisibility.push(keyBox);
+					
 					var key = new THREE.Object3D();
 					loader.load("models/key.json", function(geometry){
                         var material = new THREE.MeshPhongMaterial({
@@ -579,9 +608,8 @@
 						key.castShadow = true;
 						key.receiveShadow = true;
 						key.scale.set(0.05, 0.05, 0.05);
-						key.position.set(-3.65, 0.6, -3.54);
+						key.position.set(-2.55, 0.6, -3.54);
 						scene.add(key);
-						intObj.push(key);
 					});
 					var keyInt = new THREE.Mesh();
 					loader.load("models/key.json", function(geometry){
@@ -592,10 +620,9 @@
                         });
                         keyInt = new THREE.Mesh(geometry, material);
 						keyInt.scale.set(0.05 * 1.2, 0.05 * 1.2, 0.05 * 1.2);
-						keyInt.position.set(-3.65, 0.6, -3.54);
+						keyInt.position.set(-2.55, 0.6, -3.54);
 						keyInt.visible = false;
 						scene.add(keyInt);
-						intVisibility.push(keyInt);
 					});
 					
 					//MATCHES
@@ -626,8 +653,64 @@
 						intVisibility.push(matchesInt);
 					});
 					
+					//BATTERIES
+					var batteriesBox = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.1, 0.1), new THREE.MeshBasicMaterial({color: "black"}));
+					batteriesBox.visible = false;
+					batteriesBox.position.set(-3.65, 0.6, -3.54);
+					scene.add(batteriesBox);
+					intObj.push(batteriesBox);
+					intVisibility.push(batteriesBox);
+					var batteries = new THREE.Object3D();
+					loader.load("models/batteries.json", function(geometry, materials){
+                        batteries = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial(materials));
+						batteries.castShadow = true;
+						batteries.receiveShadow = true;
+						batteries.scale.set(0.03, 0.03, 0.03);
+						batteries.position.set(-3.65, 0.6, -3.54);
+						scene.add(batteries);
+					});
+					var batteriesInt = new THREE.Object3D();
+					loader.load("models/batteries.json", function(geometry){
+						var material = new THREE.MeshBasicMaterial({color: "blue", transparent: true, opacity: 0.2});
+                        batteriesInt = new THREE.Mesh(geometry, material);
+						batteriesInt.scale.set(0.03 * 1.1, 0.03 * 1.1, 0.03 * 1.1);
+						batteriesInt.position.set(-3.65, 0.6, -3.54);
+						batteriesInt.visibility = false;
+						scene.add(batteriesInt);
+					});
+					
+					//LIGHTSWITCH
+					var lightBox = new THREE.Object3D();
+					loader.load("models/lightBox.json", function(geometry, materials){
+                        lightBox = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial(materials));
+						lightBox.castShadow = true;
+						lightBox.receiveShadow = true;
+						scene.add(lightBox);
+						intObj.push(lightBox);
+					});
+					var lbiMaterial = new THREE.MeshBasicMaterial({
+						color : "blue",
+						transparent : true,
+						opacity : 0.2
+					});
+					var lightBoxInt = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.2, 0.2), lbiMaterial);
+					lightBoxInt.position.set(-4.9, 1.5, 2);
+					scene.add(lightBoxInt);
+					intVisibility.push(lightBoxInt);
+					
+					var lightSwitch = new THREE.Object3D();
+					loader.load("models/lightSwitch.json", function(geometry, materials){
+                        lightSwitch = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial(materials));
+						lightSwitch.castShadow = true;
+						lightSwitch.receiveShadow = true;
+						lightSwitch.rotateZ(-0.61);
+						lightSwitch.position.set(-4.86, 1.5, 2);
+						scene.add(lightSwitch);
+						LightBox.add(lightSwitch);
+					});
+					
                     //LAMP
-                    var lamp_animation = true;
+                    
                     var lamp_right = true; //for animation
                     var pivot_lamp = new THREE.Object3D();
                     pivot_lamp.position.set(2, 2.4, 0);
@@ -636,7 +719,7 @@
                     loader.load("models/lamp.json", function(geometry){
                         var material = new THREE.MeshPhongMaterial({color: "white", side: THREE.DoubleSide});
                         var lamp = new THREE.Mesh(geometry, material);
-			lamp.scale.set(1, 0.5, 1);
+						lamp.scale.set(1, 0.5, 1);
                         lamp.position.set(0, -0.5, 0);
                         scene.add(lamp);
                         pivot_lamp.add(lamp);
@@ -648,8 +731,9 @@
 					var ground = new THREE.Object3D();
 					loader.load("models/ground.json", function(geometry, materials){
                         var ground = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial(materials));
-						ground.receiveShadows = true;
+						ground.receiveShadow = true;
                         scene.add(ground);
+						colObj.push(ground);
                     });
 					
 //                     var grass_geometry = new THREE.PlaneGeometry(5, 5);
@@ -674,7 +758,7 @@
 //                         }
 //                     }
                     
-                    //HASSOCK                    
+                    //HASSOCK
                     var wind = true;
                     var wind_on = true; //animation
                     var hassock_geometry = new THREE.PlaneBufferGeometry(1, 1);
@@ -689,11 +773,12 @@
                         var j = i + 1;
                         do{
                             var x = Math.random() * 48 - 24;
-                            var y = 0.5;
+                            var y = 0.3;
                             var z = Math.random() * 60 - 20;
                         }while((x > -5.1) && (x < 5.1) || (z > -4.1) && (z < 4.1));
                         
                         hassock_array[i] = new THREE.Mesh(hassock_geometry, hassock_material);
+						hassock_array[i].castShadow = true;
                         hassock_array[i].position.set(x, y, z);
                         
                         hassock_array[j] = new THREE.Mesh(hassock_geometry, hassock_material);
@@ -701,7 +786,7 @@
                         hassock_array[j].rotateY(Math.PI/2);
                         
                         scene.add(hassock_array[i], hassock_array[j]);
-                    }                    
+                    }
                     
                     //FENCE
                     var a = -22.5;
@@ -709,7 +794,7 @@
                     var fence_material = new THREE.MeshPhongMaterial({
                         map: THREE.ImageUtils.loadTexture("textures/ground/fence.png"),
                         bumpMap: THREE.ImageUtils.loadTexture("textures/ground/fence_DISP.png"),
-                        bumpScale: 0.05,
+                        bumpScale: 0.02,
                         transparent: true
                     });
                     
@@ -935,12 +1020,14 @@
                     pointLight_fire.intensity = 0;
                     pointLight_lamp.intensity = 0;
 					directionalLight.intensity = 0.07;
+					directionalLight.castShadow = true;
                 }
                 else{
-                    spotLight_tv.intensity = 0.6;
+                    spotLight_tv.intensity = tvBrightness;
                     pointLight_fire.intensity = fireBrightness;
-                    pointLight_lamp.intensity = 1;
+                    pointLight_lamp.intensity = lampBrightness;
 					directionalLight.intensity = 0;
+					directionalLight.castShadow = false;
                 }
             }
             
@@ -1051,7 +1138,6 @@
 			
 			//COLLSION
 			function checkCollision(ray1, ray2, ray3, ray4, ray5, ray6) {
-				//rayUpdate();
 				
 				var collide1 = ray1.intersectObjects(colObj);
 				var collide2 = ray2.intersectObjects(colObj);
@@ -1073,6 +1159,8 @@
 				for(var i = 0; i < intVisibility.length; i++) {
 					intVisibility[i].visible = false;
 				}
+				keyInt.visible = false;
+				batteriesInt.visible = false;
 			
 				intersectInt = intRay.intersectObjects(intObj);
 				intersectVisible = intRay.intersectObjects(intVisibility);
@@ -1083,10 +1171,20 @@
 						}
 						
 						else{
-							intersectVisible[0].object.visible = true;
+							if((intersectVisible[0].object === keyBox) || (intersectVisible[0].object === batteriesBox)) {
+								if(intersectVisible[0].object === keyBox) {
+									keyInt.visible = true;
+								}
+								else {
+									batteriesInt.visible = true;
+								}
+							}
+							else{
+								intersectVisible[0].object.visible = true;
+							}
 						}
 					}
-					else{
+					else {
 						intersectVisible[0].object.visible = true;
 					}
 				}
@@ -1108,17 +1206,22 @@
 						dooropensound.play();
 					}
 				}
-				if(intersectInt[0].object === key) {
+				if(intersectInt[0].object === keyBox) {
 					inventory.push(key);
 					scene.remove(key);
 					scene.remove(keyInt);
+					scene.remove(keyBox);
 					doorInt.material = new THREE.MeshBasicMaterial({color: "blue", transparent: true, opacity: 0.2});
 				}
 				if(intersectInt[0].object === sl2) {
-					sl2Anim = true;
+					if(!sl2Locked) {
+						sl2Anim = true;
+					}
 				}
 				if(intersectInt[0].object === sl1) {
-					sl1Anim = true;
+					if(!sl1Locked) {
+						sl1Anim = true;
+					}
 				}
 				if(intersectInt[0].object === matches) {
 					inventory.push(matches);
@@ -1130,10 +1233,44 @@
 					if(pointLight_fire.intensity === 0) {
 						var index = inventory.indexOf(matches);
 						if(index != -1) {
+							sl2.position.z += 0.1;
+							batteries.position.z += 0.1;
+							batteriesInt.position.z += 0.1;
+							batteriesBox.position.z += 0.1;
+							sl2Locked = false;
+							sl2Int.material = new THREE.MeshBasicMaterial({color: "blue", transparent: true, opacity: 0.2});
 							fireBrightness = 1;
-                                                        fire.visible = true;
+                            fire.visible = true;
+							batteryDead = true;
+							dlCounter = 240;
 						}
 					}
+				}
+				if(intersectInt[0].object === lightBox) {
+					if(switchOn) {
+						lightSwitch.position.set(0, 0, 0);
+						lightSwitch.rotateZ(-1.22);
+						lightSwitch.position.set(-4.86, 1.5, 2);
+						lampBrightness = 0;
+						pointLight_lamp.castShadow = false;
+						switchOn = false;
+					}
+					else{
+						lightSwitch.position.set(0, 0, 0);
+						lightSwitch.rotateZ(1.22);
+						lightSwitch.position.set(-4.86, 1.5, 2);
+						pointLight_lamp.castShadow = true;
+						switchOn = true;
+						if(!brokenLight) {
+							lampBrightness = 1;
+						}
+					}
+				}
+				if(intersectInt[0].object === batteriesBox) {
+					scene.remove(batteries);
+					scene.remove(batteriesInt);
+					scene.remove(batteriesBox);
+					batteryDead = false;
 				}
 			}
 			
@@ -1150,6 +1287,20 @@
 							}
 							locked = true;
 							doorInt.material = new THREE.MeshBasicMaterial({color: "red", transparent: true, opacity: 0.2});
+						}
+					}
+					if(intersectEvent[0].object === event_tv) {
+						if(!tvEventDone) {
+							tvBrightness = 0.6;
+							screen.material = noiseTex;
+							lamp_animation = true;
+							sl1.position.z += 0.15;
+							key.position.z += 0.15;
+							keyInt.position.z += 0.15;
+							keyBox.position.z += 0.15;
+							sl1Locked = false;
+							sl1Int.material = new THREE.MeshBasicMaterial({color: "blue", transparent: true, opacity: 0.2});
+							tvEventDone = true;
 						}
 					}
 				}
@@ -1224,11 +1375,13 @@
 			
             //MOUSECLICK
 			function mouseClick(event) {
-				if(flashlight.intensity === 1) {
-					flashlight.intensity = 0;
-				}
-				else {
-					flashlight.intensity = 1;
+				if(!batteryDead){
+					if(flashlight.intensity === 1) {
+						flashlight.intensity = 0;
+					}
+					else {
+						flashlight.intensity = 1;
+					}
 				}
 			}
             
@@ -1368,18 +1521,30 @@
 				if(sl1Anim) {
 					if(sl1Open) {
 						sl1.position.z -= 0.05;
+						key.position.z -= 0.05;
+						keyInt.position.z -= 0.05;
+						keyBox.position.z -= 0.05;
 						
 						if(sl1.position.z <= -3.54) {
 							sl1.position.z = -3.54;
+							key.position.z = -3.54;
+							keyInt.position.z = -3.54;
+							keyBox.position.z = -3.54;
 							sl1Anim = false;
 							sl1Open = false;
 						}
 					}
 					else{
 						sl1.position.z += 0.05;
+						key.position.z += 0.05;
+						keyInt.position.z += 0.05;
+						keyBox.position.z += 0.05;
 						
 						if(sl1.position.z >= -3) {
 							sl1.position.z = -3;
+							key.position.z = -3;
+							keyInt.position.z = -3;
+							keyBox.position.z = -3;
 							sl1Anim = false;
 							sl1Open = true;
 						}
@@ -1389,47 +1554,80 @@
 				if(sl2Anim) {
 					if(sl2Open) {
 						sl2.position.z -= 0.05;
-						key.position.z -= 0.05;
-						keyInt.position.z -= 0.05;
+						batteries.position.z -= 0.05;
+						batteriesInt.position.z -= 0.05;
+						batteriesBox.position.z -= 0.05;
 						
 						if(sl2.position.z <= -3.54) {
 							sl2.position.z = -3.54;
-							key.position.z = -3.54;
-							keyInt.position.z = -3.54;
+							batteries.position.z = -3.54;
+							batteriesInt.position.z = -3.54;
+							batteriesBox.position.z = -3.54;
 							sl2Anim = false;
 							sl2Open = false;
 						}
 					}
 					else{
 						sl2.position.z += 0.05;
-						key.position.z += 0.05;
-						keyInt.position.z += 0.05;
+						batteries.position.z += 0.05;
+						batteriesInt.position.z += 0.05;
+						batteriesBox.position.z += 0.05;
 						
 						if(sl2.position.z >= -3) {
 							sl2.position.z = -3;
-							key.position.z = -3;
-							keyInt.position.z = -3;
+							batteries.position.z = -3;
+							batteriesInt.position.z = -3;
+							batteriesBox.position.z = -3;
 							sl2Anim = false;
 							sl2Open = true;
 						}
 					}
 				}
+				
+				if(batteryDead) {
+					if(dyingLight >= 0) {
+						dyingLight -= (1.0 / 240);
+						dlCounter -= 1;
+						flFlickerCounter -= 1;
+						if(dlCounter > 0) {
+							if(flFlickerCounter <= 0) {
+								flFlickerCounter = Math.floor((Math.random() * 20) + 5);
+								if(flashlight.intensity === 0) {
+									flashlight.intensity = dyingLight;
+								}
+								else{
+									flashlight.intensity = 0;
+								}
+							}
+						}
+					}
+					else{
+						flashlight.intensity = 0;
+					}
+				}
                 
                 if(lamp_animation){
-                    if(lamp_right){
-                        pivot_lamp.rotation.x += 0.01;
-                        if(pivot_lamp.rotation.x >= 0.15){
-                            pivot_lamp.rotation.x = 0.15;
-                            lamp_right = false;
-                        }
-                    }
-                    else{
-                        pivot_lamp.rotation.x -= 0.01;
-                        if(pivot_lamp.rotation.x <= -0.15){
-                            pivot_lamp.rotation.x = -0.15;
-                            lamp_right = true;
-                        }
-                    }
+                    // if(lamp_right){
+                        // pivot_lamp.rotation.x += 0.02;
+                        // if(pivot_lamp.rotation.x >= (Math.PI / 4)){
+                            // pivot_lamp.rotation.x = (Math.PI / 4);
+                            // lamp_right = false;
+                        // }
+                    // }
+                    // else{
+                        // pivot_lamp.rotation.x -= 0.02;
+                        // if(pivot_lamp.rotation.x <= -(Math.PI / 4)){
+                            // pivot_lamp.rotation.x = -(Math.PI / 4);
+                            // lamp_right = true;
+                        // }
+                    // }
+					if(pivot_lamp.rotation.x > 0) {
+						lampXRotationSpeed -= 0.003;
+					}
+					if(pivot_lamp.rotation.x < 0) {
+						lampXRotationSpeed += 0.003;
+					}
+					pivot_lamp.rotation.x += lampXRotationSpeed;
                 }
                 
                 if(wind){
