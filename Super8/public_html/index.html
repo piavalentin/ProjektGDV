@@ -67,7 +67,7 @@
             
             
             //RENDERER
-            var renderer = new THREE.WebGLRenderer({antialias: false});
+            var renderer = new THREE.WebGLRenderer({antialias: true});
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.shadowMapEnabled = true;
             renderer.shadowMapSoft = true;
@@ -374,7 +374,7 @@
                     scene.add(wood);
                     
                     //MIRROR
-                    var mirror_camera = new THREE.CubeCamera(0.1, 15, 128);
+                    var mirror_camera = new THREE.CubeCamera(0.1, 15, 512);
                     mirror_camera.position.set(0, 1.5, -3.8);
                     scene.add(mirror_camera);
                     
