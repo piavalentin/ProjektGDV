@@ -674,7 +674,7 @@
 //                         }
 //                     }
                     
-                    //HASSOCK
+                    //HASSOCK                    
                     var wind = true;
                     var wind_on = true; //animation
                     var hassock_geometry = new THREE.PlaneBufferGeometry(1, 1);
@@ -689,7 +689,7 @@
                         var j = i + 1;
                         do{
                             var x = Math.random() * 48 - 24;
-                            var y = 0.3;
+                            var y = 0.5;
                             var z = Math.random() * 60 - 20;
                         }while((x > -5.1) && (x < 5.1) || (z > -4.1) && (z < 4.1));
                         
@@ -701,7 +701,7 @@
                         hassock_array[j].rotateY(Math.PI/2);
                         
                         scene.add(hassock_array[i], hassock_array[j]);
-                    }
+                    }                    
                     
                     //FENCE
                     var a = -22.5;
@@ -1417,16 +1417,16 @@
                 
                 if(lamp_animation){
                     if(lamp_right){
-                        pivot_lamp.rotation.x += 0.02;
-                        if(pivot_lamp.rotation.x >= 0.18){
-                            pivot_lamp.rotation.x = 0.18;
+                        pivot_lamp.rotation.x += 0.01;
+                        if(pivot_lamp.rotation.x >= 0.15){
+                            pivot_lamp.rotation.x = 0.15;
                             lamp_right = false;
                         }
                     }
                     else{
-                        pivot_lamp.rotation.x -= 0.02;
-                        if(pivot_lamp.rotation.x <= -0.18){
-                            pivot_lamp.rotation.x = -0.18;
+                        pivot_lamp.rotation.x -= 0.01;
+                        if(pivot_lamp.rotation.x <= -0.15){
+                            pivot_lamp.rotation.x = -0.15;
                             lamp_right = true;
                         }
                     }
