@@ -70,7 +70,7 @@
             
             
             //RENDERER
-            var renderer = new THREE.WebGLRenderer({antialias: true}); //true
+            var renderer = new THREE.WebGLRenderer({antialias: false});
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.shadowMapEnabled = true;
             renderer.shadowMapSoft = true;
@@ -171,7 +171,7 @@
                 //DIRECTIONAL LIGHT
                 var directionalLight = new THREE.DirectionalLight(0xe5f1ff, 0.07);
                 directionalLight.position.set(40, 40, 40);
-                directionalLight.castShadow = false;
+                directionalLight.castShadow = true;
                 directionalLight.shadowDarkness = 0.4;
                 directionalLight.shadowCameraNear = 0;
                 directionalLight.shadowCameraFar = 100;
@@ -188,7 +188,6 @@
                 var spotLight_tv = new THREE.SpotLight("white", 0.6);
                 spotLight_tv.position.set(4.5, 1.4, 3.5);
                 spotLight_tv.visible = true;
-                spotLight_tv.shadowCameraVisible = false;
                 spotLight_tv.castShadow = true;
                 spotLight_tv.shadowDarkness = 0.3;
                 spotLight_tv.shadowCameraFov = 90;               
@@ -198,12 +197,11 @@
 				
                 var pointLight_lamp = new THREE.SpotLight(0xfffce5, 1);
                 pointLight_lamp.position.y = -0.1;
-                pointLight_lamp.shadowCameraVisible = false;
                 pointLight_lamp.castShadow = true;
                 pointLight_lamp.shadowDarkness = 0.3;
                 pointLight_lamp.shadowCameraFov = 90;
                 pointLight_lamp.shadowCameraNear = 0.1;
-                pointLight_lamp.shadowCameraFar = 5.01;
+                pointLight_lamp.shadowCameraFar = 5.01;                
                 scene.add(pointLight_lamp);
                 
                 var pointLight_lamp_target = new THREE.Object3D();
@@ -215,8 +213,6 @@
                 var pointLight_fire = new THREE.PointLight(0xffd460, 0, 3);
                 pointLight_fire.position.set(0, 0.6, 2.8);
                 pointLight_fire.visible = true;
-				pointLight_fire.castShadow = true;
-				pointLight_fire.shadowDarkness = 0.3;
                 pointLight_fire.shadowCameraFov = 90;
                 pointLight_fire.shadowCameraNear = 0.1;
                 pointLight_fire.shadowCameraFar = 10.01;
@@ -355,18 +351,13 @@
                     scene.add(wood);
                     
                     //MIRROR
-                    var mirror_camera = new THREE.CubeCamera(0.1, 15, 512); //1024
+                    var mirror_camera = new THREE.CubeCamera(0.1, 15, 128);
                     mirror_camera.position.set(0, 1.5, -3.8);
                     scene.add(mirror_camera);
                     
                     var mirror = new THREE.Mesh(new THREE.PlaneBufferGeometry(1, 1.2), new THREE.MeshPhongMaterial({envMap: mirror_camera.renderTarget}));
                     mirror.position.set(0, 1.5, -3.8);
                     scene.add(mirror);
-					
-					// var testaudio = new Audio('whitenoise.mp3');
-					// if(camera.lookAt(mirror_camera)){
-						// testaudio.play();
-					// }
                     
                     //TV
                     loader.load("models/tv.json", function(geometry){
@@ -404,7 +395,7 @@
                         huette = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial(materials));
 						huette.castShadow = true;
 						huette.receiveShadow = true;
-						huette.position.set(0, -0.15, 0);
+						huette.position.set(0, -0.1, 0);
 						scene.add(huette);
 						colObj.push(huette);
 					});
@@ -415,7 +406,7 @@
 						roof.castShadow = true;
 						roof.receiveShadow = true;
                         roof = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial(materials));
-						roof.position.set(0, -0.15, 0);
+						roof.position.set(0, -0.1, 0);
 						scene.add(roof);
 					});
 					
@@ -628,55 +619,48 @@
 					
                     //LAMP
                     var lamp_animation = true;
-                    var lamp_right = true; //for animation
+                    var lamp_right = true; //for animation                    
                     var pivot_lamp = new THREE.Object3D();
-                    pivot_lamp.position.set(2, 2.4, 0);
+                    pivot_lamp.position.set(2, 2.4, 0);                    
                     scene.add(pivot_lamp);
                     pivot_lamp.add(pointLight_lamp_target);
+                    
                     loader.load("models/lamp.json", function(geometry){
                         var material = new THREE.MeshPhongMaterial({color: "white", side: THREE.DoubleSide});
                         var lamp = new THREE.Mesh(geometry, material);
 			lamp.scale.set(1, 0.5, 1);
                         lamp.position.set(0, -0.5, 0);
+                        
                         scene.add(lamp);
                         pivot_lamp.add(lamp);
                         lamp.add(pointLight_lamp);
                     });
 					
                 //GROUND
-                    //GRASS
-					var ground = new THREE.Object3D();
-					loader.load("models/ground.json", function(geometry, materials){
-                        var ground = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial(materials));
-						ground.receiveShadows = true;
-                        scene.add(ground);
-                    });
-					
-//                     var grass_geometry = new THREE.PlaneGeometry(5, 5);
-//                     var grass_material = new THREE.MeshPhongMaterial({
-//                         map: THREE.ImageUtils.loadTexture("textures/ground/grass.jpg"),
-//                         bumpMap: THREE.ImageUtils.loadTexture("textures/ground/grass_DISP.jpg"),
-//                         bumpScale: 0.1
-//                     });                                                        
-//                     var grass_array = [];
-//                     var x = -25;
-//                     var z = -25;
-//                     for(var i = 0; i < 154; i++){
-//                         grass_array.push(new THREE.Mesh(grass_geometry, grass_material));
-//                         grass_array[i].position.set(x, 0, z);
-//                         grass_array[i].rotateX(-Math.PI/2);
-//                         grass_array[i].receiveShadow = true;
-//                         scene.add(grass_array[i]);
-//                         x += 5;
-//                         if(x > 25){
-//                             x = -25;
-//                             z += 5;
-//                         }
-//                     }
+                    //GRASS				
+                    var grass_geometry = new THREE.PlaneGeometry(5, 5);
+                    var grass_material = new THREE.MeshPhongMaterial({
+                        map: THREE.ImageUtils.loadTexture("textures/ground/grass.jpg"),
+                        bumpMap: THREE.ImageUtils.loadTexture("textures/ground/grass_DISP.jpg"),
+                        bumpScale: 0.1
+                    });                                                        
+                    var grass_array = [];
+                    var x = -25;
+                    var z = -25;
+                    for(var i = 0; i < 154; i++){
+                        grass_array.push(new THREE.Mesh(grass_geometry, grass_material));
+                        grass_array[i].position.set(x, 0, z);
+                        grass_array[i].rotateX(-Math.PI/2);
+                        grass_array[i].receiveShadow = true;
+                        scene.add(grass_array[i]);
+                        x += 5;
+                        if(x > 25){
+                            x = -25;
+                            z += 5;
+                        }
+                    }
                     
                     //HASSOCK                    
-                    var wind = true;
-                    var wind_on = true; //animation
                     var hassock_geometry = new THREE.PlaneBufferGeometry(1, 1);
                     var hassock_material = new THREE.MeshPhongMaterial({
                         map: THREE.ImageUtils.loadTexture("textures/ground/hassock.png"),
@@ -701,8 +685,8 @@
                         hassock_array[j].rotateY(Math.PI/2);
                         
                         scene.add(hassock_array[i], hassock_array[j]);
-                    }                    
-                    
+                    }   
+                                        
                     //FENCE
                     var a = -22.5;
                     var fence_geometry = new THREE.PlaneBufferGeometry(5, 2);
@@ -856,9 +840,9 @@
                         rain_particles.vertices.push(new THREE.Vector3(x, y, z));
                     }
                     var rain_particle_system = new THREE.PointCloud(rain_particles, rain_particle_material);
-                    scene.add(rain_particle_system); 
+                    scene.add(rain_particle_system);
                     
-                    //SMOKE
+                    //SMOKE                    
                     var smoke_count = 200;
                     var smoke_particles = new THREE.Geometry();
                     var smoke_particle_material = new THREE.PointCloudMaterial({
@@ -875,10 +859,12 @@
                         smoke_particles.vertices.push(new THREE.Vector3(x, y, z));
                     }
                     var smoke_particle_system = new THREE.PointCloud(smoke_particles, smoke_particle_material);
+                    smoke_particle_system.visible = false;
                     scene.add(smoke_particle_system);
                     
             
-            //FUNCTION
+            //FUNCTION            
+            var fire_on = false;
             function updateParticleSystem(){
                 for(var i = 0; i < rain_particles.vertices.length; i++){
                     rain_particles.verticesNeedUpdate = true;
@@ -891,17 +877,19 @@
                     }
                 }         
                 
-                for(var j = 0; j < smoke_particles.vertices.length; j++){
-                    smoke_particles.verticesNeedUpdate = true;
-                    if(smoke_particles.vertices[j].y > 9){
-                        smoke_particles.vertices[j].x = Math.random() * (0.2 + 0.2) - 0.2;
-                        smoke_particles.vertices[j].y = Math.random() * (5.2 - 5) + 5;
-                        smoke_particles.vertices[j].z = Math.random() * (3.6 - 3.2) + 3.2;
-                    }
-                    smoke_particles.vertices[j].y += 0.03;
-                } 
+                if(fire_on){
+                    for(var j = 0; j < smoke_particles.vertices.length; j++){
+                        smoke_particles.verticesNeedUpdate = true;
+                        if(smoke_particles.vertices[j].y > 9){
+                            smoke_particles.vertices[j].x = Math.random() * (0.2 + 0.2) - 0.2;
+                            smoke_particles.vertices[j].y = Math.random() * (5.2 - 5) + 5;
+                            smoke_particles.vertices[j].z = Math.random() * (3.6 - 3.2) + 3.2;
+                        }
+                        smoke_particles.vertices[j].y += 0.03;
+                    } 
+                }
             }
-            
+                        
             function updateFire(){
                 if(image_counter === 126){
                     image_counter = 51;
@@ -934,13 +922,15 @@
                     spotLight_tv.intensity = 0;
                     pointLight_fire.intensity = 0;
                     pointLight_lamp.intensity = 0;
-					directionalLight.intensity = 0.07;
+                    directionalLight.intensity = 0.07;
+                    directionalLight.castShadow = true;
                 }
                 else{
                     spotLight_tv.intensity = 0.6;
                     pointLight_fire.intensity = fireBrightness;
                     pointLight_lamp.intensity = 1;
-					directionalLight.intensity = 0;
+                    directionalLight.intensity = 0;
+                    directionalLight.castShadow = false;
                 }
             }
             
@@ -1132,6 +1122,8 @@
 						if(index != -1) {
 							fireBrightness = 1;
                                                         fire.visible = true;
+                                                        smoke_particle_system.visible = true;
+                                                        fire_on = true;
 						}
 					}
 				}
@@ -1428,33 +1420,6 @@
                         if(pivot_lamp.rotation.x <= -0.15){
                             pivot_lamp.rotation.x = -0.15;
                             lamp_right = true;
-                        }
-                    }
-                }
-                
-                if(wind){
-                    if(wind_on){
-                        for(var i = 0; i < 100; i+=2){
-                            var j = i + 1;
-                            hassock_array[i].rotation.x += 0.02;
-                            hassock_array[j].rotation.x += 0.02;
-                            if(hassock_array[i].rotation.x >= 0.175){
-                                hassock_array[i].rotation.x = 0.175;
-                                hassock_array[j].rotation.x = 0.175;
-                                wind_on = false;
-                            }
-                        }
-                    }
-                    else{
-                        for(var i = 0; i < 100; i+=2){
-                            var j = i + 1;
-                            hassock_array[i].rotation.x -= 0.02;
-                            hassock_array[j].rotation.x -= 0.02;
-                            if(hassock_array[i].rotation.x <= 0){
-                                hassock_array[i].rotation.x = 0;
-                                hassock_array[j].rotation.x = 0;
-                                wind_on = true;
-                            }
                         }
                     }
                 }
